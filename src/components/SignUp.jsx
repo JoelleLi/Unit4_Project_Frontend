@@ -2,6 +2,7 @@ import axios from "axios"
 import { useState } from 'react'
 
 export default function SignUp() {
+    const [errorMessage, setErrorMessage] = useState("")
     const [formData, setFormData] = useState({
         username: "",
         first_name: "",
@@ -16,6 +17,20 @@ export default function SignUp() {
         setFormData({ ...formData, [e.target.name]: e.target.value })
         // console.log(e.target.value)
     }
+
+    const formatErrorMessage = (errorResponse) => {
+        let formattedMessage = "";
+        // Loop through the error response object and format the error messages
+        for (const key in errorResponse) {
+            if (errorResponse.hasOwnProperty(key)) {
+                // Get the field name from the key
+                const fieldName = key.charAt(0).toUpperCase() + key.slice(1).replace("_", " ");
+                // Concatenate the error messages with the field name
+                formattedMessage += `${fieldName}: ${errorResponse[key].join(", ")}\n\n`;
+            }
+        }
+        return formattedMessage;
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -41,9 +56,24 @@ export default function SignUp() {
             },
             )
             console.log("Signup successful", data)
+
+            const loginData = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/token/`, {
+                username: formData.username,
+                password: formData.password
+            }, {
+                headers: { "Content-Type": "application/json" }
+            });
+    
+            localStorage.clear();
+            localStorage.setItem("access_token", loginData.data.access);
+            localStorage.setItem("refresh_token", loginData.data.refresh);
+            axios.defaults.headers.common["Authorization"] = `Bearer ${loginData.data["access"]}`;
+            window.location.href = "/"
         } catch (error) {
-            console.error("Error during signup", error)
-            console.log(formData)
+            console.error("Error during signup", error);
+            console.log(error.request.response);
+            setErrorMessage(formatErrorMessage(JSON.parse(error.request.response)));
+            console.log(formData);
         }
     }
 
@@ -110,6 +140,7 @@ export default function SignUp() {
             type="submit">
                 Sign Up
             </button>
+            <p>{errorMessage}</p>
         </form>
     </div>    
   )

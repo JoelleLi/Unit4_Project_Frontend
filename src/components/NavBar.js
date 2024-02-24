@@ -1,14 +1,6 @@
-import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-export default function NavBar() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-
-  useEffect(() => {
-    if (localStorage.getItem("access_token") !== null) {
-      setIsLoggedIn(true)
-    }
-  }, [isLoggedIn])
+export default function NavBar({isLoggedIn}) {
 
   return (
     <nav>
@@ -18,7 +10,7 @@ export default function NavBar() {
       |
       <Link to="/people">Birthday Diary</Link>
       |
-      {isLoggedIn ? <Link to="/logout">Log Out</Link> : <p>You're not logged in</p>}
+      {isLoggedIn ? <Link to="/logout">Log Out</Link> : <Link to="/">Log In</Link> }
     </nav>
   )
 }
