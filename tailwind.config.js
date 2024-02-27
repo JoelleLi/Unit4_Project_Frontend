@@ -1,12 +1,11 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  future: {
-    // removeDeprecatedGapUtilities: true,
-    // purgeLayersByDefault: true,
-  },
-  purge: [],
+  content: ["./src/**/*.{html,js}"],
   theme: {
     extend: {},
   },
-  variants: {},
-  plugins: [],
+  plugins: [require("daisyui")],
+  daisyui: {
+    themes: [""]
+  }
 }

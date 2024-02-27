@@ -34,7 +34,7 @@ export default function Login() {
     }
 
   return (
-    <div>
+    <>
         <div>Login</div>
         <div className="w-full max-w-xs">
             <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit} >
@@ -58,15 +58,16 @@ export default function Login() {
                 type="submit">
                     Sign In
                 </button>
-                <p className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
+                {/* <p className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
                     Forgot Password?
-                </p>
+                </p> */}
                 </div>
             </form>
             <p className="text-center text-gray-500 text-xs">
                 &copy;2020 Acme Corp. All rights reserved.
             </p>
         </div>
-    </div>
+        
+    </>
   )
 }

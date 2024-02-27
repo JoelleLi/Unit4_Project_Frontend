@@ -1,5 +1,6 @@
 import axios from "axios"
 import { useState } from 'react'
+import { useUsers } from "../context/UserContext"
 
 export default function SignUp() {
     const [errorMessage, setErrorMessage] = useState("")
@@ -12,25 +13,26 @@ export default function SignUp() {
         password2: "",
         error: ""
     })
+    const { setUsername: setContextUsername } = useUsers()
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value })
         // console.log(e.target.value)
     }
 
-    const formatErrorMessage = (errorResponse) => {
-        let formattedMessage = "";
-        // Loop through the error response object and format the error messages
-        for (const key in errorResponse) {
-            if (errorResponse.hasOwnProperty(key)) {
-                // Get the field name from the key
-                const fieldName = key.charAt(0).toUpperCase() + key.slice(1).replace("_", " ");
-                // Concatenate the error messages with the field name
-                formattedMessage += `${fieldName}: ${errorResponse[key].join(", ")}\n\n`;
-            }
-        }
-        return formattedMessage;
-    };
+    // const formatErrorMessage = (errorResponse) => {
+    //     let formattedMessage = "";
+    //     // Loop through the error response object and format the error messages
+    //     for (const key in errorResponse) {
+    //         if (errorResponse.hasOwnProperty(key)) {
+    //             // Get the field name from the key
+    //             const fieldName = key.charAt(0).toUpperCase() + key.slice(1).replace("_", " ");
+    //             // Concatenate the error messages with the field name
+    //             formattedMessage += `${fieldName}: ${errorResponse[key].join(", ")}\n\n`;
+    //         }
+    //     }
+    //     return formattedMessage;
+    // };
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -42,6 +44,8 @@ export default function SignUp() {
             password: formData.password,
             password2: formData.password2
         }
+
+        setContextUsername(user.username)
 
         if (formData.password !== formData.password2) {
             setFormData({ ...formData, error: "Passwords don't match"})
@@ -62,18 +66,33 @@ export default function SignUp() {
                 password: formData.password
             }, {
                 headers: { "Content-Type": "application/json" }
-            });
+            })
     
-            localStorage.clear();
-            localStorage.setItem("access_token", loginData.data.access);
-            localStorage.setItem("refresh_token", loginData.data.refresh);
-            axios.defaults.headers.common["Authorization"] = `Bearer ${loginData.data["access"]}`;
+            localStorage.clear()
+            localStorage.setItem('username', data.username)
+            localStorage.setItem("access_token", loginData.data.access)
+            localStorage.setItem("refresh_token", loginData.data.refresh)
+            axios.defaults.headers.common["Authorization"] = `Bearer ${loginData.data["access"]}`
+            console.log("Logged in")
+
+
+            await axios.post(`${process.env.REACT_APP_BACKEND_URL}/userprofiles/`, {username: formData.username}, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${loginData.data.access}` // Include access token in the request headers
+                },
+            }, {
+                withCredentials: true
+            });
+            console.log("User profile created successfully")
+
             window.location.href = "/"
+            
         } catch (error) {
-            console.error("Error during signup", error);
-            console.log(error.request.response);
-            setErrorMessage(formatErrorMessage(JSON.parse(error.request.response)));
-            console.log(formData);
+            console.error("Error during signup", error)
+            console.log(error.request.response)
+            // setErrorMessage(formatErrorMessage(JSON.parse(error.request.response)))
+            console.log(formData)
         }
     }
 
@@ -140,7 +159,7 @@ export default function SignUp() {
             type="submit">
                 Sign Up
             </button>
-            <p>{errorMessage}</p>
+            {/* <p>{errorMessage}</p> */}
         </form>
     </div>    
   )

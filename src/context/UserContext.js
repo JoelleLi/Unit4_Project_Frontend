@@ -10,6 +10,7 @@ export function useUsers() {
 export const UsersProvider = ({children}) => {
     const [username, setUsername] = useState(null)
     const [userFirstName, setUserFirstName] = useState([])
+    const [userProfile, setUserProfile] = useState({})
 
     useEffect(() => {
         // Initialize username from local storage
@@ -25,7 +26,9 @@ export const UsersProvider = ({children}) => {
             username,
             setUsername,
             userFirstName,
-            setUserFirstName
+            setUserFirstName,
+            userProfile,
+            setUserProfile
         }}
         >
             {children}

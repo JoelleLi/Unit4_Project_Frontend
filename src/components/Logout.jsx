@@ -6,7 +6,7 @@ export default function Logout() {
         (async () => {
             try {
                 // eslint-disable-next-line no-unused-vars
-                const { data } = await axios.post(
+                await axios.post(
                     `${process.env.REACT_APP_BACKEND_URL}/logout/`,
                     {
                         refresh_token: localStorage.getItem("refresh_token"),
@@ -16,6 +16,9 @@ export default function Logout() {
                             "Content-Type": "application/json",
                             "Authorization": `Bearer ${localStorage.getItem("access_token")}`
                         }
+                    },
+                    {
+                        withCredentials: true
                     }
                 )
                 localStorage.clear()
