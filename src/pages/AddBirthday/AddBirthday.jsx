@@ -1,6 +1,77 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { useState } from "react"
+import axios from "axios"
 
-export default function AddBirthday() {
+export default function AddBirthday({ userDetails }) {
+  const token = localStorage.getItem("access_token")
+  const [formSubmitted, setFormSubmitted] = useState(false)
+
+  const navigate = useNavigate()
+
+  const [formData, setFormData] = useState({
+    // first_name: "",
+    // last_name: "", 
+    // birthday: "",
+    // address: "",
+    // colours: "",
+    // cake: "",
+    // dietary: "",
+    // flowers: "",
+    // brands: "",
+    // likes_surprises: "",
+    // drinks_alcohol: "",
+    // username: userDetails.username
+  })
+
+  function handleChange(e) {
+    const { name, value } = e.target
+    setFormData(prevFormData => ({ ...prevFormData, [name]: value }))
+    console.log(formData)
+  }
+
+  async function addPerson(formData, e) {
+    e.preventDefault()
+    const body = {
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        birthday: formData.birthday,
+        address: formData.address,
+        colours: formData.colours,
+        cake: formData.cake,
+        dietary: formData.dietary,
+        flowers: formData.flowers,
+        brands: formData.brands,
+        likes_surprises: formData.likes_surprises,
+        drinks_alcohol: formData.drinks_alcohol,
+        created_by: userDetails.id
+    }
+    console.log(body)
+
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/persons/add/${userDetails.id}/`, body,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` // Include access token in the request headers
+        }, 
+        withCredentials: true
+      })
+      if (response.status === 200) {
+     
+      setFormData(body)
+      setFormSubmitted(true) 
+      console.log("Form submitted successfully", body)
+    }
+    } catch (error) {
+      console.error(error)
+      console.log(body)
+
+    }
+    navigate(`/people`)
+
+  }
+
+  
     const today = new Date();
     // Format today's date to YYYY-MM-DD
     const formattedDate = today.toISOString().split('T')[0];
@@ -8,14 +79,14 @@ export default function AddBirthday() {
 
   return (
     <div>
-    <form>
+    <form onSubmit={(e) => addPerson(formData, e)} >
         <div className="">
           <div className="border-b border-gray-900/10 pb-3">
             <h2 className="text-base font-semibold leading-7 text-gray-900">
             Add Birthday
             </h2>
 
-            <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            {/* <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="col-span-full">
                 <label
                   htmlFor="photo"
@@ -44,7 +115,7 @@ export default function AddBirthday() {
                   </button>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="border-b border-gray-900/10 pb-3">
@@ -59,9 +130,11 @@ export default function AddBirthday() {
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="first-name"
+                    name="first_name"
+                    value={formData.first_name}
                     id="first-name"
                     autoComplete="given-name"
+                    onChange={(e) => handleChange(e)}
                     className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -77,9 +150,31 @@ export default function AddBirthday() {
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="last-name"
+                    name="last_name"
+                    value={formData.last_name}
                     id="last-name"
                     autoComplete="family-name"
+                    onChange={(e) => handleChange(e)}
+                    className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+
+              <div className="sm:col-span-3">
+                <label
+                  htmlFor="last-name"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Address
+                </label>
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    name="last-name"
+                    value={formData.address}
+                    id="last-name"
+                    autoComplete="family-name"
+                    onChange={(e) => handleChange(e)}
                     className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -96,9 +191,11 @@ export default function AddBirthday() {
                   <input
                     type="date"
                     name="birthday"
+                    value={formData.birthday}
                     id="date"
                     autoComplete="birthday"
                     max={formattedDate}
+                    onChange={(e) => handleChange(e)}
                     className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -115,8 +212,10 @@ export default function AddBirthday() {
                   <input
                     type="text"
                     name="colours"
+                    value={formData.colours}
                     id="colours"
                     autoComplete="colours"
+                    onChange={(e) => handleChange(e)}
                     className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -133,8 +232,10 @@ export default function AddBirthday() {
                   <input
                     type="text"
                     name="cake"
+                    value={formData.cake}
                     id="cake"
                     autoComplete="cake"
+                    onChange={(e) => handleChange(e)}
                     className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -151,8 +252,10 @@ export default function AddBirthday() {
                   <input
                     type="text"
                     name="dietary"
+                    value={formData.dietary}
                     id="dietary"
                     autoComplete="dietary"
+                    onChange={(e) => handleChange(e)}
                     className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -169,8 +272,10 @@ export default function AddBirthday() {
                   <input
                     type="text"
                     name="flowers"
+                    value={formData.flowers}
                     id="flowers"
                     autoComplete="flowers"
+                    onChange={(e) => handleChange(e)}
                     className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -187,8 +292,10 @@ export default function AddBirthday() {
                   <input
                     type="text"
                     name="brands"
+                    value={formData.brands}
                     id="brands"
                     autoComplete="brands"
+                    onChange={(e) => handleChange(e)}
                     className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -205,7 +312,9 @@ export default function AddBirthday() {
                   <select
                     id="likes_surprises"
                     name="likes_surprises"
+                    value={formData.likes_surprises}
                     autoComplete="likes_surprises"
+                    onChange={(e) => handleChange(e)}
                     className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                   >
                     <option>...</option>
@@ -224,9 +333,11 @@ export default function AddBirthday() {
                 </label>
                 <div className="mt-2">
                   <select
-                    id="drinks_alcoho"
-                    name="drinks_alcoho"
-                    autoComplete="drinks_alcoho"
+                    id="drinks_alcohol"
+                    name="drinks_alcohol"
+                    value={formData.drinks_alcohol}
+                    autoComplete="drinks_alcohol"
+                    onChange={(e) => handleChange(e)}
                     className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                   >
                     <option>...</option>
@@ -253,7 +364,7 @@ export default function AddBirthday() {
             type="submit"
             className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
-            Save
+            Add Birthday
           </button>
         </div>
       </form>

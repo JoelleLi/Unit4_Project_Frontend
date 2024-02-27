@@ -23,7 +23,7 @@ function App() {
   const { username, setUserFirstName } = useUsers()
 
   const token = localStorage.getItem("access_token")
-
+  console.log(userDetails.id)
   async function fetchData() {
     try {
         const userResponse = await axios.get(`http://localhost:8000/users/${username}`,
@@ -36,6 +36,8 @@ function App() {
         )
         setUserFirstName(userResponse.data.first_name)
         setUserDetails(userResponse.data)
+        console.log(userResponse.data)
+
         
     }
     catch (error) {
@@ -71,7 +73,7 @@ function App() {
           <Route path="/editprofile" element={<EditUserProfile isLoggedIn={ isLoggedIn } userDetails={ userDetails } />} />
           <Route path="/wishlist/:username" element={<WishList isLoggedIn={ isLoggedIn } />} />
           <Route path="/wishlist/wish/:id" element={<Wish isLoggedIn={ isLoggedIn } />} />
-          <Route path="/wishlist/add" element={<CreateWish isLoggedIn={ isLoggedIn } />} />
+          <Route path="/wishlist/add" element={<CreateWish isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
         </Routes>
       </div>
     </>

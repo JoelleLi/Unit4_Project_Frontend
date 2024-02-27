@@ -1,13 +1,56 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { useState } from "react"
 import { useUsers } from "../../context/UserContext"
 import '../../App.css'
+import axios from "axios"
 
-export default function CreateWish() {
-    const { username } = useUsers()
+export default function CreateWish({ userDetails }) {
+  const token = localStorage.getItem("access_token")
+  const [formSubmitted, setFormSubmitted] = useState(false)
+  const { username } = useUsers()
+  const [formData, setFormData] = useState({})
+
+  const navigate = useNavigate()
+
+  function handleChange(e) {
+    const { name, value, type, checked } = e.target
+    const newValue = type === 'checkbox' ? checked : value
+    setFormData(prevFormData => ({ ...prevFormData, [name]: newValue }))
+    console.log(formData)
+  }
+
+  async function addWish(formData, e) {
+    e.preventDefault()
+    const body = {
+
+    }
+    console.log(body)
+
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/wishlist/add/`, body,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` // Include access token in the request headers
+        }, 
+        withCredentials: true
+      })
+      if (response.status === 200) {
+     
+      setFormData(body)
+      setFormSubmitted(true) 
+      console.log("Form submitted successfully", body)
+    }
+    } catch (error) {
+      console.error(error)
+    }
+    navigate(`/people`)
+
+  }
 
   return (
     <div>
-        <form>
+        <form onSubmit={(e) => addWish(formData, e)}>
         <div className="">
           <div className="border-b border-gray-900/10 pb-3">
             <h2 className="text-base font-semibold leading-7 text-gray-900">
@@ -17,7 +60,7 @@ export default function CreateWish() {
               This information will be displayed publicly.
             </p>
 
-            <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            {/* <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="col-span-full">
                 <label
                   htmlFor="photo"
@@ -46,7 +89,7 @@ export default function CreateWish() {
                   </button>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="border-b border-gray-900/10 pb-3">
@@ -54,7 +97,7 @@ export default function CreateWish() {
 
               <div className="col-span-full">
                 <label
-                  htmlFor="colours"
+                  htmlFor="name"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
                 Wish Name
@@ -62,9 +105,11 @@ export default function CreateWish() {
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="colours"
-                    id="colours"
-                    autoComplete="colours"
+                    name="name"
+                    value={formData.name}
+                    id="name"
+                    autoComplete="name"
+                    onChange={(e) => handleChange(e)}
                     className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -72,7 +117,7 @@ export default function CreateWish() {
 
               <div className="col-span-full">
                 <label
-                  htmlFor="cake"
+                  htmlFor="url"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
                 Link (optional)
@@ -80,9 +125,11 @@ export default function CreateWish() {
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="cake"
-                    id="cake"
-                    autoComplete="cake"
+                    name="url"
+                    value={formData.name}
+                    id="url"
+                    autoComplete="url"
+                    onChange={(e) => handleChange(e)}
                     className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
@@ -90,7 +137,7 @@ export default function CreateWish() {
 
               <div className="col-span-full">
                 <label
-                  htmlFor="dietary"
+                  htmlFor="description"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
                 Description (optional)
@@ -98,26 +145,38 @@ export default function CreateWish() {
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="dietary"
-                    id="dietary"
-                    autoComplete="dietary"
+                    name="description"
+                    value={formData.name}
+                    id="description"
+                    autoComplete="description"
+                    onChange={(e) => handleChange(e)}
                     className="large-input block w-full px-2 rounded-md border-0 py-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
 
+              <div class="flex items-center mb-4">
+                <input id="reserved" type="checkbox" 
+                checked={formData.reserved}
+                onChange={(e) => handleChange(e)}
+                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                <label for="reserved" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Reserved</label>
+              </div>
+
               <div className="sm:col-span-full">
                 <label
-                  htmlFor="likes_surprises"
+                  htmlFor="priority"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
                 Priority
                 </label>
                 <div className="mt-2">
                   <select
-                    id="likes_surprises"
-                    name="likes_surprises"
-                    autoComplete="likes_surprises"
+                    id="priority"
+                    name="priority"
+                    value={formData.priority}
+                    autoComplete="priority"
+                    onChange={(e) => handleChange(e)}
                     className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                   >
                     <option>...</option>

@@ -8,6 +8,8 @@ export default function EditUserProfile({isLoggedIn, userDetails}) {
     const [selectedFile, setSelectedFile] = useState(null)
     const [formSubmitted, setFormSubmitted] = useState(false)
     const [profileId, setProfileId] = useState()
+    const [profileImage, setProfileImage] = useState("")
+    const [profileImageId, setProfileImageId] = useState()
 
     const { username, userProfile, setUserProfile } = useUsers()
 
@@ -98,6 +100,19 @@ export default function EditUserProfile({isLoggedIn, userDetails}) {
         
         // Optionally, perform additional actions after successful upload
         console.log('Photo uploaded successfully!')
+        console.log(profileImageId)
+
+        if (profileImageId) {
+          await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/photos/${profileImageId}/delete/`, formData, 
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              "Authorization": `Bearer ${token}` // Include access token in the request headers
+            }
+          })
+  
+          console.log("Old image deleted successfully, old id: ")
+        }
       } catch (error) {
         console.error('Error uploading photo:', error)
       }
@@ -126,6 +141,18 @@ export default function EditUserProfile({isLoggedIn, userDetails}) {
             likes_surprises: userProfile.likes_surprises,
             drinks_alcohol: userProfile.drinks_alcohol
           })
+
+          if (userProfileData.image) {
+            const photoResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/photos/${userProfileData.image}`, {
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+              }
+            })
+            const photoData = photoResponse.data
+            setProfileImageId(userProfileData.image)
+            setProfileImage(photoData.url)
+          }
       }
       catch (error) {
           console.log(error)
@@ -142,11 +169,23 @@ export default function EditUserProfile({isLoggedIn, userDetails}) {
     <>
 
       <div>
+        {profileImage ? 
+        <div>
+        <img src={profileImage} alt="" width="100vmin" />
         <form onSubmit={handleSubmit}>
-          <input type="file" name="photo-file" onChange={handleFileChange} />
-          <br /><br/>
-          <button type="submit">Upload Photo</button>
+        <input type="file" name="photo-file" onChange={handleFileChange} />
+        <br /><br/>
+        <button type="submit">Change Photo</button>
         </form>
+        </div>
+        :
+        <form onSubmit={handleSubmit}>
+        <input type="file" name="photo-file" onChange={handleFileChange} />
+        <br /><br/>
+        <button type="submit">Upload Photo</button>
+        </form>
+        }
+
       </div>
 
 
@@ -160,7 +199,7 @@ export default function EditUserProfile({isLoggedIn, userDetails}) {
               This information will be displayed publicly.
             </p>
 
-            <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            {/* <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="col-span-full">
                 <label
                   htmlFor="photo"
@@ -189,7 +228,7 @@ export default function EditUserProfile({isLoggedIn, userDetails}) {
                   </button>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="border-b border-gray-900/10 pb-3">

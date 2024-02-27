@@ -1,9 +1,10 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useUsers } from "../../context/UserContext"
 import axios from "axios"
 import { Link } from 'react-router-dom'
 
 export default function UserProfile({isLoggedIn}) {
+  const [profileImage, setProfileImage] = useState("")
     const { username, userFirstName, userProfile, setUserProfile } = useUsers()
     const token = localStorage.getItem("access_token")
 
@@ -19,6 +20,17 @@ export default function UserProfile({isLoggedIn}) {
             )
             const userProfileData = userProfileResponse.data
             setUserProfile(userProfileData)
+
+            if (userProfileData.image) {
+              const photoResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/photos/${userProfileData.image}`, {
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${token}`
+                }
+              })
+              const photoData = photoResponse.data
+              setProfileImage(photoData.url)
+            }
         }
         catch (error) {
             console.log(error)
@@ -73,7 +85,7 @@ export default function UserProfile({isLoggedIn}) {
       <p>{formatBirthdayMessage()}</p>
       {userProfile.image
       ?
-      <img src={userProfile.image} alt="User Profile Avatar" />
+      <img src={profileImage} alt="User Profile Avatar" width="100vmin"/>
       :
       <p>No image uploaded</p>
       }
