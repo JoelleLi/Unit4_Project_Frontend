@@ -3,11 +3,11 @@ import { useUsers } from "../../context/UserContext"
 import { useState, useEffect } from "react"
 import axios from "axios";
 
-export default function EditUserProfile({isLoggedIn}) {
+export default function EditUserProfile({isLoggedIn, userDetails}) {
     const token = localStorage.getItem("access_token")
     const [selectedFile, setSelectedFile] = useState(null)
-    const [editUser, setEditUser] = useState(null)
     const [formSubmitted, setFormSubmitted] = useState(false)
+    const [profileId, setProfileId] = useState()
 
     const { username, userProfile, setUserProfile } = useUsers()
 
@@ -22,7 +22,6 @@ export default function EditUserProfile({isLoggedIn}) {
       brands: userProfile.brands,
       likes_surprises: userProfile.likes_surprises,
       drinks_alcohol: userProfile.drinks_alcohol,
-      user: 13
     })
 
     function handleChange(e) {
@@ -42,7 +41,7 @@ export default function EditUserProfile({isLoggedIn}) {
         brands: formData.brands,
         likes_surprises: formData.likes_surprises,
         drinks_alcohol: formData.drinks_alcohol,
-        user: 13
+        user: userDetails.id
       }
       console.log(body)
   
@@ -61,7 +60,6 @@ export default function EditUserProfile({isLoggedIn}) {
           ...body
         }))
         setFormData(body)
-        setEditUser(null)
         setFormSubmitted(true) 
         console.log("Form submitted successfully", body)
       }
@@ -84,11 +82,13 @@ export default function EditUserProfile({isLoggedIn}) {
       
       // Create a FormData object to append the selected file
       const formData = new FormData()
-      formData.append('photo-file', selectedFile)
+      formData.append(
+        'photo-file', selectedFile
+        )
 
       try {
         // Send a POST request to upload the photo
-        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/userprofile/add_photo/${username}/`, formData, 
+        await axios.post(`${process.env.REACT_APP_BACKEND_URL}/userprofile/${profileId}/add_photo/`, formData, 
         {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -115,6 +115,7 @@ export default function EditUserProfile({isLoggedIn}) {
           )
           const userProfileData = userProfileResponse.data
           setUserProfile(userProfileData)
+          setProfileId(userProfileData.id)
           setFormData({
             birthday: userProfile.birthday,
             colours: userProfile.colours,

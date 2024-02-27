@@ -18,6 +18,7 @@ import CreateWish from './pages/CreateWish/CreateWish'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userDetails, setUserDetails] = useState({})
 
   const { username, setUserFirstName } = useUsers()
 
@@ -34,6 +35,8 @@ function App() {
         }
         )
         setUserFirstName(userResponse.data.first_name)
+        setUserDetails(userResponse.data)
+        
     }
     catch (error) {
         console.log(error)
@@ -64,8 +67,8 @@ function App() {
           <Route path="/people/:id" element={ <Person isLoggedIn={ isLoggedIn } />} />
           <Route path="/editperson/:id" element={ <EditPerson isLoggedIn={ isLoggedIn } />} />
           <Route path="/logout" element={<Logout isLoggedIn={ isLoggedIn } />} />
-          <Route path="/addbirthday" element={<AddBirthday isLoggedIn={ isLoggedIn } />} />
-          <Route path="/editprofile" element={<EditUserProfile isLoggedIn={ isLoggedIn } />} />
+          <Route path="/addbirthday" element={<AddBirthday isLoggedIn={ isLoggedIn } userDetails={ userDetails } />} />
+          <Route path="/editprofile" element={<EditUserProfile isLoggedIn={ isLoggedIn } userDetails={ userDetails } />} />
           <Route path="/wishlist/:username" element={<WishList isLoggedIn={ isLoggedIn } />} />
           <Route path="/wishlist/wish/:id" element={<Wish isLoggedIn={ isLoggedIn } />} />
           <Route path="/wishlist/add" element={<CreateWish isLoggedIn={ isLoggedIn } />} />
