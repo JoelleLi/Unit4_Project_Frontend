@@ -7,27 +7,46 @@ import axios from "axios"
 export default function CreateWish({ userDetails }) {
   const token = localStorage.getItem("access_token")
   const [formSubmitted, setFormSubmitted] = useState(false)
+  const [selectedFiles, setSelectedFiles] = useState([])
   const { username } = useUsers()
-  const [formData, setFormData] = useState({})
+  const [formData, setFormData] = useState({
+    // name: "",
+    // url: "",
+    // description: "",
+    // reserved: false,
+    // priority: ""
+  })
 
   const navigate = useNavigate()
 
+  // const handleFileChange = (event) => {
+  //   setSelectedFile(event.target.files[0])
+  // }
+  const handleFileChange = (event) => {
+    setSelectedFiles([...selectedFiles, ...event.target.files])
+  }
+
+
   function handleChange(e) {
     const { name, value, type, checked } = e.target
-    const newValue = type === 'checkbox' ? checked : value
-    setFormData(prevFormData => ({ ...prevFormData, [name]: newValue }))
+    const reservedValue = type === 'checkbox' ? checked : value
+    setFormData(prevFormData => ({ ...prevFormData, [name]: reservedValue }))
     console.log(formData)
   }
 
   async function addWish(formData, e) {
     e.preventDefault()
     const body = {
-
+      name: formData.name,
+      url: formData.url,
+      description: formData.description,
+      reserved: formData.reserved,
+      priority: formData.priority,
+      user: userDetails.id
     }
-    console.log(body)
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/wishlist/add/`, body,
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/wishlist/add/${userDetails.id}/`, body,
       {
         headers: {
           "Content-Type": "application/json",
@@ -35,16 +54,34 @@ export default function CreateWish({ userDetails }) {
         }, 
         withCredentials: true
       })
-      if (response.status === 200) {
-     
-      setFormData(body)
-      setFormSubmitted(true) 
-      console.log("Form submitted successfully", body)
+      if (response) {      
+        setFormSubmitted(true) 
+        console.log("Form submitted successfully", body)
+        console.log(response.data.id)
+
+      const newWishId = response.data.id
+
+      const uploadPromises = selectedFiles.map(file => {
+        const photoFormData = new FormData();
+        photoFormData.append('photo-file', file);
+
+        return axios.post(`${process.env.REACT_APP_BACKEND_URL}/wish/${newWishId}/add_photo/`, photoFormData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            "Authorization": `Bearer ${token}` // Include access token in the request headers
+          }
+        });
+      });
+
+      await Promise.all(uploadPromises);
+
+      console.log('Photos uploaded successfully!');
     }
-    } catch (error) {
-      console.error(error)
+
+      }catch (error) {
+        console.error('Error uploading photo:', error);
     }
-    navigate(`/people`)
+    navigate(`/wishlist/${username}`)
 
   }
 
@@ -60,13 +97,13 @@ export default function CreateWish({ userDetails }) {
               This information will be displayed publicly.
             </p>
 
-            {/* <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="col-span-full">
                 <label
                   htmlFor="photo"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                Add Image
+                Photo
                 </label>
                 <div className="mt-2 flex items-center gap-x-3">
                   <svg
@@ -81,15 +118,22 @@ export default function CreateWish({ userDetails }) {
                       clipRule="evenodd"
                     />
                   </svg>
+
+                 
+                  <input type="file" name="photo-file" onChange={handleFileChange} multiple/>
+                  <br /><br/>
                   <button
-                    type="button"
+                    type="submit"
                     className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                   >
-                    Change
+                    Upload Image
                   </button>
+               
+
+
                 </div>
               </div>
-            </div> */}
+            </div>
           </div>
 
           <div className="border-b border-gray-900/10 pb-3">
@@ -126,7 +170,7 @@ export default function CreateWish({ userDetails }) {
                   <input
                     type="text"
                     name="url"
-                    value={formData.name}
+                    value={formData.url}
                     id="url"
                     autoComplete="url"
                     onChange={(e) => handleChange(e)}
@@ -146,7 +190,7 @@ export default function CreateWish({ userDetails }) {
                   <input
                     type="text"
                     name="description"
-                    value={formData.name}
+                    value={formData.description}
                     id="description"
                     autoComplete="description"
                     onChange={(e) => handleChange(e)}
@@ -155,12 +199,21 @@ export default function CreateWish({ userDetails }) {
                 </div>
               </div>
 
-              <div class="flex items-center mb-4">
-                <input id="reserved" type="checkbox" 
-                checked={formData.reserved}
-                onChange={(e) => handleChange(e)}
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                <label for="reserved" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Reserved</label>
+             <div className="flex items-center mb-4">
+                <input
+                  id="reserved"
+                  type="checkbox"
+                  value={formData.reserved}
+                  name="reserved"
+                  onChange={handleChange}
+                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+                <label
+                  htmlFor="reserved"
+                  className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                >
+                  Reserved
+                </label>
               </div>
 
               <div className="sm:col-span-full">
@@ -179,10 +232,9 @@ export default function CreateWish({ userDetails }) {
                     onChange={(e) => handleChange(e)}
                     className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                   >
-                    <option>...</option>
-                    <option>Desparately Need!</option>
-                    <option>Medium</option>
-                    <option>Low</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">Desparately Need!</option>
                   </select>
                 </div>
               </div>

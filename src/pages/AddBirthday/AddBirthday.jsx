@@ -4,9 +4,14 @@ import axios from "axios"
 
 export default function AddBirthday({ userDetails }) {
   const token = localStorage.getItem("access_token")
+  const [selectedFile, setSelectedFile] = useState(null)
   const [formSubmitted, setFormSubmitted] = useState(false)
 
   const navigate = useNavigate()
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0])
+  }
 
   const [formData, setFormData] = useState({
     // first_name: "",
@@ -30,7 +35,7 @@ export default function AddBirthday({ userDetails }) {
   }
 
   async function addPerson(formData, e) {
-    e.preventDefault()
+    e.preventDefault();
     const body = {
         first_name: formData.first_name,
         last_name: formData.last_name,
@@ -44,32 +49,49 @@ export default function AddBirthday({ userDetails }) {
         likes_surprises: formData.likes_surprises,
         drinks_alcohol: formData.drinks_alcohol,
         created_by: userDetails.id
-    }
-    console.log(body)
+    };
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/persons/add/${userDetails.id}/`, body,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` // Include access token in the request headers
-        }, 
-        withCredentials: true
-      })
-      if (response.status === 200) {
-     
-      setFormData(body)
-      setFormSubmitted(true) 
-      console.log("Form submitted successfully", body)
-    }
+        const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/persons/add/${userDetails.id}/`, body, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}` // Include access token in the request headers
+            },
+            withCredentials: true
+        });
+
+        if (response) {
+            console.log("Form submitted successfully", body);
+            console.log(response.data.id); // Log the response data containing the newly created person
+
+            // Extract the ID of the newly created person from the response data
+            const newPersonId = response.data.id;
+
+            const photoFormData = new FormData();
+            photoFormData.append('photo-file', selectedFile);
+
+            try {
+                // Send a POST request to upload the photo
+                await axios.post(`${process.env.REACT_APP_BACKEND_URL}/persons/${newPersonId}/add_photo/`, photoFormData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        "Authorization": `Bearer ${token}` // Include access token in the request headers
+                    }
+                });
+
+                // Optionally, perform additional actions after successful upload
+                console.log('Photo uploaded successfully!');
+
+            } catch (error) {
+                console.error('Error uploading photo:', error);
+            }
+        }
     } catch (error) {
-      console.error(error)
-      console.log(body)
-
+        console.error(error);
+        console.log(body);
     }
-    navigate(`/people`)
-
-  }
+    navigate(`/people`);
+}
 
   
     const today = new Date();
@@ -86,7 +108,7 @@ export default function AddBirthday({ userDetails }) {
             Add Birthday
             </h2>
 
-            {/* <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
               <div className="col-span-full">
                 <label
                   htmlFor="photo"
@@ -107,15 +129,22 @@ export default function AddBirthday({ userDetails }) {
                       clipRule="evenodd"
                     />
                   </svg>
+
+                 
+                  <input type="file" name="photo-file" onChange={handleFileChange} />
+                  <br /><br/>
                   <button
-                    type="button"
+                    type="submit"
                     className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                   >
-                    Change
+                    Upload Image
                   </button>
+               
+
+
                 </div>
               </div>
-            </div> */}
+            </div>
           </div>
 
           <div className="border-b border-gray-900/10 pb-3">
@@ -162,7 +191,7 @@ export default function AddBirthday({ userDetails }) {
 
               <div className="sm:col-span-3">
                 <label
-                  htmlFor="last-name"
+                  htmlFor="address"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
                   Address
@@ -170,10 +199,10 @@ export default function AddBirthday({ userDetails }) {
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="last-name"
+                    name="address"
                     value={formData.address}
                     id="last-name"
-                    autoComplete="family-name"
+                    autoComplete="address"
                     onChange={(e) => handleChange(e)}
                     className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />

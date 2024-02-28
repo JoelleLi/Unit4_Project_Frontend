@@ -15,34 +15,6 @@ export default function Home({isLoggedIn}) {
     setShowLogin(!showLogin)
   }
 
-  // async function fetchData() {
-  //   const userProfile = {
-  //     user: username,
-  //     birthday: null,
-  //     image: null,
-  //     colours: "",
-  //     cake: "",
-  //     dietary: "",
-  //     flowers: "",
-  //     brands: "",
-  //     likes_surprises: null,
-  //     drinks_alcohol: null
-  // }
-
-  // try {
-  //   await axios.post(`${process.env.REACT_APP_BACKEND_URL}/userprofile/`, userProfile, {
-  //     headers: {
-  //         "Content-Type": "application/json",
-  //         "Authorization": `Bearer ${localStorage.getItem("access_token")}`
-  //       },
-  //   });
-  //   console.log("User profile created successfully")    
-  // }
-  //   catch (error) {
-  //       console.log(error)
-  //   }
-  // }
-
   useEffect(() => {
     if (isLoggedIn){
       // fetchData()

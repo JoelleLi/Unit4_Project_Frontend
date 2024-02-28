@@ -2,10 +2,12 @@ import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useUsers } from '../../context/UserContext'
 import axios from 'axios'
+import PersonCard from '../../components/PersonCard/PersonCard'
 
 export default function People({isLoggedIn}) {
   const token = localStorage.getItem("access_token")
   const [peopleList, setPeopleList] = useState([])
+  const [profileImage, setProfileImage] = useState("")
   const { username } = useUsers()
 
   async function fetchData() {
@@ -49,13 +51,15 @@ export default function People({isLoggedIn}) {
     <ul className="p-6 divide-y divide-slate-200">
       {peopleList && peopleList.map(person => (
         <Link to={`/people/${person.id}`} key={person.id}>
-        <li className="flex py-4 first:pt-0 last:pb-0">
+
+          <PersonCard person={person} key={person.id} isLoggedIn={isLoggedIn}/>
+        {/* <li className="flex py-4 first:pt-0 last:pb-0">
           <img className="h-10 w-10 rounded-full" src={person.image} alt="" />
           <div className="ml-3 overflow-hidden">
             <p className="text-sm font-medium text-slate-900">{person.first_name} {person.last_name}</p>
             <p className="text-sm text-slate-500 truncate">{calculateAge(person.birthday)} on {new Date(person.birthday).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</p>
           </div>
-        </li>
+        </li> */}
         </Link>
         ))
       }

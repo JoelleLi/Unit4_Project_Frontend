@@ -15,6 +15,7 @@ import WishList from './pages/WishList/WishList'
 import Wish from './pages/Wish/Wish'
 import EditPerson from './pages/EditPerson/EditPerson'
 import CreateWish from './pages/CreateWish/CreateWish'
+import EditWish from './pages/EditWish/EditWish'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -23,7 +24,6 @@ function App() {
   const { username, setUserFirstName } = useUsers()
 
   const token = localStorage.getItem("access_token")
-  console.log(userDetails.id)
   async function fetchData() {
     try {
         const userResponse = await axios.get(`http://localhost:8000/users/${username}`,
@@ -36,8 +36,6 @@ function App() {
         )
         setUserFirstName(userResponse.data.first_name)
         setUserDetails(userResponse.data)
-        console.log(userResponse.data)
-
         
     }
     catch (error) {
@@ -49,11 +47,9 @@ function App() {
     if (localStorage.getItem("access_token") !== null) {
       setIsLoggedIn(true)
       console.log("Logged in")
-    }
-    if (isLoggedIn){
       fetchData()
     }
-  }, [isLoggedIn])
+  }, [])
 
   return (
     <>
@@ -67,13 +63,14 @@ function App() {
           <Route path="/user" element={ <UserProfile isLoggedIn={ isLoggedIn } />} />
           <Route path="/people" element={ <People isLoggedIn={ isLoggedIn } />} />
           <Route path="/people/:id" element={ <Person isLoggedIn={ isLoggedIn } />} />
-          <Route path="/editperson/:id" element={ <EditPerson isLoggedIn={ isLoggedIn } />} />
+          <Route path="/editperson/:id" element={ <EditPerson isLoggedIn={ isLoggedIn } userDetails={userDetails}/>} />
           <Route path="/logout" element={<Logout isLoggedIn={ isLoggedIn } />} />
           <Route path="/addbirthday" element={<AddBirthday isLoggedIn={ isLoggedIn } userDetails={ userDetails } />} />
           <Route path="/editprofile" element={<EditUserProfile isLoggedIn={ isLoggedIn } userDetails={ userDetails } />} />
           <Route path="/wishlist/:username" element={<WishList isLoggedIn={ isLoggedIn } />} />
           <Route path="/wishlist/wish/:id" element={<Wish isLoggedIn={ isLoggedIn } />} />
           <Route path="/wishlist/add" element={<CreateWish isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
+          <Route path="/wish/edit/:id" element={<EditWish isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
         </Routes>
       </div>
     </>
