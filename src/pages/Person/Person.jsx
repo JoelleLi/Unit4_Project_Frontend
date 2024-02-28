@@ -57,7 +57,7 @@ export default function Person({isLoggedIn}) {
     <div>
         <div>Person</div>
         {personProfile.image ? 
-        <img src={profileImage} alt=""/> : <p>Image Not Uploaded</p>}
+        <img src={profileImage} alt="" width="100vmin"/> : <p>Image Not Uploaded</p>}
         <p>{personProfile.first_name} {personProfile.last_name}</p>
         <p>Card: {personProfile.card} Present: {personProfile.present}</p>
 

@@ -116,9 +116,28 @@ export default function EditPerson({userDetails}) {
             "Authorization": `Bearer ${token}` // Include access token in the request headers
           }
         })
-
+        
         console.log("Old image deleted successfully, old id: ")
       }
+
+      const updatedPersonResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/persons/profile/${person.id}/`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      })
+      if (updatedPersonResponse.data.image) {
+        const photoResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/photos/${updatedPersonResponse.data.image}`, {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        });
+        const photoData = photoResponse.data;
+        setProfileImageId(updatedPersonResponse.data.image);
+        setProfileImage(photoData.url);
+      }
+
     } catch (error) {
       console.error('Error uploading photo:', error)
     }

@@ -12,9 +12,11 @@ import Logout from './components/Logout'
 import AddBirthday from './pages/AddBirthday/AddBirthday'
 import EditUserProfile from './pages/EditUserProfile/EditUserProfile'
 import WishList from './pages/WishList/WishList'
+import WishListPerson from './pages/WishList/WishListPerson'
 import Wish from './pages/Wish/Wish'
 import EditPerson from './pages/EditPerson/EditPerson'
 import CreateWish from './pages/CreateWish/CreateWish'
+import CreateWishPerson from './pages/CreateWish/CreateWishPerson'
 import EditWish from './pages/EditWish/EditWish'
 
 function App() {
@@ -69,9 +71,10 @@ function App() {
           <Route path="/addbirthday" element={<AddBirthday isLoggedIn={ isLoggedIn } userDetails={ userDetails } />} />
           <Route path="/editprofile" element={<EditUserProfile isLoggedIn={ isLoggedIn } userDetails={ userDetails } />} />
           <Route path="/wishlist/:username" element={<WishList isLoggedIn={ isLoggedIn } />} />
-          <Route path="/wishlist/person/:id" element={<WishList isLoggedIn={ isLoggedIn } />} />
+          <Route path="/wishlist/person/:id" element={<WishListPerson isLoggedIn={ isLoggedIn } />} />
           <Route path="/wishlist/wish/:id" element={<Wish isLoggedIn={ isLoggedIn } />} />
           <Route path="/wishlist/add" element={<CreateWish isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
+          <Route path="/wishlist/person/add" element={<CreateWishPerson isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
           <Route path="/wish/edit/:id" element={<EditWish isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
         </Routes>
       </div>
