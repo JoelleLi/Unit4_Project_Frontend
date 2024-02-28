@@ -70,11 +70,11 @@ export default function Person({isLoggedIn}) {
       <div>
       <Link to={`/editperson/${personProfile.id}`}>
         <button className="bg-pink-300 hover:bg-blue-700 text-grey font-bold py-2 px-4 rounded-full">
-          {personProfile.first_name}
+          Edit {personProfile.first_name}'s Profile
         </button>
       </Link>
 
-      <Link to={`/editperson/${personProfile.id}`}>
+      <Link to={`/wishlist/person/${personProfile.id}`}>
         <button className="bg-pink-300 hover:bg-blue-700 text-grey font-bold py-2 px-4 rounded-full">
           WishList
         </button>

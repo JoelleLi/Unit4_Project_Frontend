@@ -7,8 +7,9 @@ export default function WishCard({ wish }) {
 
   async function fetchData() {
     if (wish.images) {
+        console.log(wish.images[0])
         try {
-            const imagesResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/photos/${wish.images}`, {
+            const imagesResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/photos/${wish.images[0]}`, {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`

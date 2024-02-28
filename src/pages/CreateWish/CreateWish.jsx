@@ -9,23 +9,13 @@ export default function CreateWish({ userDetails }) {
   const [formSubmitted, setFormSubmitted] = useState(false)
   const [selectedFiles, setSelectedFiles] = useState([])
   const { username } = useUsers()
-  const [formData, setFormData] = useState({
-    // name: "",
-    // url: "",
-    // description: "",
-    // reserved: false,
-    // priority: ""
-  })
+  const [formData, setFormData] = useState({})
 
   const navigate = useNavigate()
 
-  // const handleFileChange = (event) => {
-  //   setSelectedFile(event.target.files[0])
-  // }
   const handleFileChange = (event) => {
     setSelectedFiles([...selectedFiles, ...event.target.files])
   }
-
 
   function handleChange(e) {
     const { name, value, type, checked } = e.target
@@ -36,6 +26,11 @@ export default function CreateWish({ userDetails }) {
 
   async function addWish(formData, e) {
     e.preventDefault()
+
+    if (!formData.priority) {
+      alert('Please select a priority for the wish.');
+      return;
+    }
     const body = {
       name: formData.name,
       url: formData.url,
@@ -80,6 +75,7 @@ export default function CreateWish({ userDetails }) {
 
       }catch (error) {
         console.error('Error uploading photo:', error);
+        console.log(body)
     }
     navigate(`/wishlist/${username}`)
 
@@ -228,10 +224,10 @@ export default function CreateWish({ userDetails }) {
                     id="priority"
                     name="priority"
                     value={formData.priority}
-                    autoComplete="priority"
                     onChange={(e) => handleChange(e)}
                     className="block w-full px-2 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                   >
+                    <option value="">Select a priority</option>
                     <option value="Low">Low</option>
                     <option value="Medium">Medium</option>
                     <option value="High">Desparately Need!</option>

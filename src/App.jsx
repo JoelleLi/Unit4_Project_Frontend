@@ -36,6 +36,7 @@ function App() {
         )
         setUserFirstName(userResponse.data.first_name)
         setUserDetails(userResponse.data)
+        console.log(userResponse.data)
         
     }
     catch (error) {
@@ -49,7 +50,7 @@ function App() {
       console.log("Logged in")
       fetchData()
     }
-  }, [])
+  }, [isLoggedIn])
 
   return (
     <>
@@ -68,6 +69,7 @@ function App() {
           <Route path="/addbirthday" element={<AddBirthday isLoggedIn={ isLoggedIn } userDetails={ userDetails } />} />
           <Route path="/editprofile" element={<EditUserProfile isLoggedIn={ isLoggedIn } userDetails={ userDetails } />} />
           <Route path="/wishlist/:username" element={<WishList isLoggedIn={ isLoggedIn } />} />
+          <Route path="/wishlist/person/:id" element={<WishList isLoggedIn={ isLoggedIn } />} />
           <Route path="/wishlist/wish/:id" element={<Wish isLoggedIn={ isLoggedIn } />} />
           <Route path="/wishlist/add" element={<CreateWish isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
           <Route path="/wish/edit/:id" element={<EditWish isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />

@@ -7,7 +7,7 @@ import { PersonsProvider } from './context/PersonContext'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <UsersProvider>
     <PersonsProvider>
       <BrowserRouter>
@@ -15,7 +15,7 @@ root.render(
       </BrowserRouter>
       </PersonsProvider>
     </UsersProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 )
 
 // If you want to start measuring performance in your app, pass a function
