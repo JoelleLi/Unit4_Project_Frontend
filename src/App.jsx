@@ -23,7 +23,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const { username, setUserFirstName, setUserDetails, userDetails } = useUsers()
 
-  const token = localStorage.getItem("access_token")
+  // const token = localStorage.getItem("access_token")
   async function fetchData() {
     try {
         const userResponse = await axios.get(`http://localhost:8000/users/${username}`,

@@ -6,7 +6,6 @@ import { Link, useParams } from "react-router-dom";
 export default function UserProfile({ isLoggedIn }) {
   const [profileImage, setProfileImage] = useState("");
   const {
-    userFirstName,
     userProfile,
     setUserProfile,
     userDetails,
