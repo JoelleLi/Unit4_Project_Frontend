@@ -41,6 +41,7 @@ export default function UserProfile({isLoggedIn}) {
       if (isLoggedIn) {
         fetchData()
       }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const formatBirthday = () => {
@@ -85,7 +86,13 @@ export default function UserProfile({isLoggedIn}) {
       <p>{formatBirthdayMessage()}</p>
       {userProfile.image
       ?
-      <img src={profileImage} alt="User Profile Avatar" width="100vmin"/>
+      <>
+      <div className="avatar">
+        <div className="w-24 rounded-full">
+          <img src={profileImage} alt="User Profile Avatar"/>
+        </div>
+      </div>
+      </>
       :
       <p>No image uploaded</p>
       }
@@ -94,18 +101,10 @@ export default function UserProfile({isLoggedIn}) {
         <p>Favourite Colours: {userProfile.colours}</p>
         <p>Favourite Cake: {userProfile.cake}</p>
         <p>Dietary Requirements: {userProfile.dietary}</p>
-        <p>Drinks Alcohol: {userProfile.drinks_alcohol}</p>
         <p>Favourite Flowers: {userProfile.flowers}</p>
         <p>Likes Surprises: {userProfile.likes_surprises}</p>
+        <p>Drinks Alcohol: {userProfile.drinks_alcohol}</p>
       </div>
-
-      {/* <div>
-        <form onSubmit={handleSubmit}>
-          <input type="file" name="photo-file" onChange={handleFileChange} />
-          <br />
-          <button type="submit">Upload Photo</button>
-        </form>
-      </div> */}
 
       <Link to="/editprofile">
         <button className="bg-pink-300 hover:bg-blue-700 text-grey font-bold py-2 px-4 rounded-full">
@@ -121,24 +120,19 @@ export default function UserProfile({isLoggedIn}) {
       <Link to="/">Things I Like</Link>
       |
       <Link to="/">My Notes</Link>
-
+      
+      {isLoggedIn ? 
+      <Link to="/logout">
+      <li>
+      <div className=''>Log Out</div>
+      </li>
+      </Link> 
+      : 
+      <Link to="/">
+      <div className=''>Log In</div>
+      </Link> 
+      }
     </nav>
-
-      {/* {data &&
-        data.map(userprofile => (
-          <div key={userprofile.id}>
-            <p>{userprofile.user}</p>
-            <p>{userprofile.cake}</p>
-          </div>
-          ))
-        }
-        {userFirstName &&
-        userFirstName.map(user => (
-          <div key={user.id}>
-            <p>{user.first_name}</p>
-          </div>
-          ))
-        } */}
       </>
       :
       <p>You're not logged in</p>

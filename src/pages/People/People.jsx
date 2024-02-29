@@ -7,7 +7,6 @@ import PersonCard from '../../components/PersonCard/PersonCard'
 export default function People({isLoggedIn}) {
   const token = localStorage.getItem("access_token")
   const [peopleList, setPeopleList] = useState([])
-  const [profileImage, setProfileImage] = useState("")
   const { username } = useUsers()
 
   async function fetchData() {
@@ -31,20 +30,24 @@ export default function People({isLoggedIn}) {
     if (isLoggedIn) {
       fetchData()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  function calculateAge(birthdate) {
-    const today = new Date()
-    const birthDate = new Date(birthdate)
-    let age = today.getFullYear() - birthDate.getFullYear()
-    const monthDiff = today.getMonth() - birthDate.getMonth()
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-      age--
-    }
-    return age + 1
-  }
+  // function calculateAge(birthdate) {
+  //   const today = new Date()
+  //   const birthDate = new Date(birthdate)
+  //   let age = today.getFullYear() - birthDate.getFullYear()
+  //   const monthDiff = today.getMonth() - birthDate.getMonth()
+  //   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+  //     age--
+  //   }
+  //   return age + 1
+  // }
 
   return (
+    <>
+    {isLoggedIn 
+    ?
     <>
     <div>People</div>
 
@@ -70,6 +73,10 @@ export default function People({isLoggedIn}) {
         Add Birthday
       </button>
     </Link>
+    </>
+    :
+    <div>You're not logged in</div>
+    }
     </>
   )
 }

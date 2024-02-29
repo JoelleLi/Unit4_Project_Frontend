@@ -1,35 +1,26 @@
 import { useState, useEffect } from "react"
-import { useUsers } from "../../context/UserContext"
+// import { useUsers } from "../../context/UserContext"
 import { Link, useParams } from "react-router-dom"
 import WishCard from "../../components/WishCard/WishCard"
 import axios from "axios"
-import { usePersons } from "../../context/PersonContext"
+// import { usePersons } from "../../context/PersonContext"
 
 export default function WishList() {
-  const token = localStorage.getItem("access_token")
+  // const token = localStorage.getItem("access_token")
   const [wishList, setWishList] = useState([])
-  const {username} = useUsers()
+  // const {username} = useUsers()
   // const { person } = usePersons()
-  const { id } = useParams()
+  const { username } = useParams()
 
   async function fetchData() {
     try {
-      let wishes;
-      if (id) {
-        wishes = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/wishlist/person/${id}`, {
+  
+        const wishes = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/wishlist/${username}`, {
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}` // Include access token in the request headers
-          }
-        });
-      } else {
-        wishes = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/wishlist/${username}`, {
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}` // Include access token in the request headers
-          }
-        });
-      }
+            // "Authorization": `Bearer ${token}` // Include access token in the request headers
+    }})
+
       setWishList(wishes.data);
       console.log(wishes.data);
     } catch (error) {
@@ -39,7 +30,8 @@ export default function WishList() {
 
   useEffect(() => {
     fetchData();
-  }, [id]); // Call fetchData whenever params change
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [username]); // Call fetchData whenever params change
 
   return (
     <div>

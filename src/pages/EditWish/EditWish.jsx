@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
-import { useUsers } from "../../context/UserContext"
 import { useState, useEffect } from "react"
 import axios from "axios";
 
@@ -9,8 +8,7 @@ export default function EditWish() {
   const [wish, setWish] = useState({})
   const [wishImages, setWishImages] = useState([])
   const [selectedFile, setSelectedFile] = useState(null)
-  const [formSubmitted, setFormSubmitted] = useState(false)
-  const { username } = useUsers()
+  const [setFormSubmitted] = useState(false)
   const { id } = useParams()
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
@@ -67,8 +65,9 @@ export default function EditWish() {
   }
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleDeleteImage = async (imageId) => {
     try {

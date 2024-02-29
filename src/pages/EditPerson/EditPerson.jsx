@@ -1,5 +1,4 @@
 import { Link, useNavigate } from "react-router-dom"
-import { useUsers } from "../../context/UserContext"
 import { useState, useEffect } from "react"
 import { usePersons } from "../../context/PersonContext"
 import axios from "axios";
@@ -7,12 +6,10 @@ import axios from "axios";
 export default function EditPerson({userDetails}) {
   const token = localStorage.getItem("access_token")
   const [selectedFile, setSelectedFile] = useState(null)
-  const [formSubmitted, setFormSubmitted] = useState(false)
-  const [personId, serPersonId] = useState()
+  const [setFormSubmitted] = useState(false)
   const [profileImage, setProfileImage] = useState("")
   const [profileImageId, setProfileImageId] = useState()
 
-  const { username, userProfile, setUserProfile } = useUsers()
   const { person, setPerson } = usePersons()
 
   const navigate = useNavigate()
@@ -181,6 +178,7 @@ export default function EditPerson({userDetails}) {
 
   useEffect(() => {
     fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 

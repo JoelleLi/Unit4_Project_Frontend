@@ -1,17 +1,14 @@
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react"
-import { useUsers } from "../../context/UserContext"
 import { usePersons } from "../../context/PersonContext"
-import { useEffect } from "react"
 
 import '../../App.css'
 import axios from "axios"
 
 export default function CreateWishPerson({ userDetails }) {
     const token = localStorage.getItem("access_token")
-    const [formSubmitted, setFormSubmitted] = useState(false)
+    const [setFormSubmitted] = useState(false)
     const [selectedFiles, setSelectedFiles] = useState([])
-    const { username } = useUsers()
     const { personId } = usePersons()
     const [formData, setFormData] = useState({})
 
@@ -85,9 +82,6 @@ export default function CreateWishPerson({ userDetails }) {
         navigate(`/wishlist/person/${personId}`)
     
       }
-
-    // useEffect(() => {
-    // }, [])
 
     return (
  <div>

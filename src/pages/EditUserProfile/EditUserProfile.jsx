@@ -6,7 +6,7 @@ import axios from "axios";
 export default function EditUserProfile({isLoggedIn, userDetails}) {
     const token = localStorage.getItem("access_token")
     const [selectedFile, setSelectedFile] = useState(null)
-    const [formSubmitted, setFormSubmitted] = useState(false)
+    const [setFormSubmitted] = useState(false)
     const [profileId, setProfileId] = useState()
     const [profileImage, setProfileImage] = useState("")
     const [profileImageId, setProfileImageId] = useState()
@@ -116,6 +116,8 @@ export default function EditUserProfile({isLoggedIn, userDetails}) {
       } catch (error) {
         console.error('Error uploading photo:', error)
       }
+      fetchData()
+
     }
 
     async function fetchData() {
@@ -129,6 +131,8 @@ export default function EditUserProfile({isLoggedIn, userDetails}) {
           } 
           )
           const userProfileData = userProfileResponse.data
+          console.log(userProfileResponse.data)
+
           setUserProfile(userProfileData)
           setProfileId(userProfileData.id)
           setFormData({
@@ -152,6 +156,8 @@ export default function EditUserProfile({isLoggedIn, userDetails}) {
             const photoData = photoResponse.data
             setProfileImageId(userProfileData.image)
             setProfileImage(photoData.url)
+          } else {
+            setProfileImage(null)
           }
       }
       catch (error) {
@@ -159,10 +165,30 @@ export default function EditUserProfile({isLoggedIn, userDetails}) {
       }
   }
 
+  const handleDeleteImage = async (profileImageId) => {
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_BACKEND_URL}/photos/${profileImageId}/delete/`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // Update profileImageId state to null after successful deletion
+      // setProfileImageId(null);
+    } catch (error) {
+      console.log(error);
+    }
+    fetchData()
+  };
+
     useEffect(() => {
       if (isLoggedIn) {
         fetchData()
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
   return (
@@ -177,6 +203,9 @@ export default function EditUserProfile({isLoggedIn, userDetails}) {
         <br /><br/>
         <button type="submit">Change Photo</button>
         </form>
+        <button onClick={() => handleDeleteImage(profileImageId)}>
+          Delete Image
+        </button>
         </div>
         :
         <form onSubmit={handleSubmit}>
@@ -459,7 +488,7 @@ export default function EditUserProfile({isLoggedIn, userDetails}) {
           </Link>
           <button
             type="submit"
-            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className=""
           >
             Save
           </button>

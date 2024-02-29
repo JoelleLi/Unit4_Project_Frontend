@@ -6,7 +6,7 @@ import axios from "axios"
 
 export default function CreateWish({ userDetails }) {
   const token = localStorage.getItem("access_token")
-  const [formSubmitted, setFormSubmitted] = useState(false)
+  const [setFormSubmitted] = useState(false)
   const [selectedFiles, setSelectedFiles] = useState([])
   const { username } = useUsers()
   const [formData, setFormData] = useState({})

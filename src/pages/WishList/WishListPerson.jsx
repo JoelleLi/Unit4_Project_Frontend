@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import { useUsers } from "../../context/UserContext"
 import { Link, useParams } from "react-router-dom"
 import WishCard from "../../components/WishCard/WishCard"
 import axios from "axios"
@@ -8,9 +7,7 @@ import { usePersons } from "../../context/PersonContext"
 export default function WishList() {
   const token = localStorage.getItem("access_token")
   const [wishList, setWishList] = useState([])
-  const {username} = useUsers()
-  const { setPersonId, personId } = usePersons()
-  // const { person } = usePersons()
+  const { setPersonId } = usePersons()
   const { id } = useParams()
 
   async function fetchData() {
@@ -33,6 +30,7 @@ export default function WishList() {
   useEffect(() => {
     fetchData()
     setPersonId(id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Call fetchData whenever params change
 
   return (

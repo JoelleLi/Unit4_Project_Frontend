@@ -51,22 +51,33 @@ export default function Person({isLoggedIn}) {
     if (isLoggedIn) {
       fetchData()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
     <div>
         <div>Person</div>
         {personProfile.image ? 
-        <img src={profileImage} alt="" width="100vmin"/> : <p>Image Not Uploaded</p>}
+        <>
+        <div className="avatar">
+          <div className="w-24 rounded-full">
+            <img src={profileImage} alt="User Profile Avatar"/>
+          </div>
+        </div>
+        </> 
+        : 
+        <>
+        <div className="avatar placeholder">
+          <div className="bg-neutral text-neutral-content rounded-full w-24">
+            <span className="text-3xl">{personProfile.first_name ? personProfile.first_name.charAt(0).toUpperCase() : ''}</span>
+          </div>
+        </div> 
+        </>
+        }
+
         <p>{personProfile.first_name} {personProfile.last_name}</p>
         <p>Card: {personProfile.card} Present: {personProfile.present}</p>
-
-        <Link to={`/editperson/${personProfile.id}`}>
-        <button className="bg-pink-300 hover:bg-blue-700 text-grey font-bold py-2 px-4 rounded-full">
-          Edit Person
-        </button>
-      </Link>
-
+        
       <div>
       <Link to={`/editperson/${personProfile.id}`}>
         <button className="bg-pink-300 hover:bg-blue-700 text-grey font-bold py-2 px-4 rounded-full">
@@ -80,6 +91,8 @@ export default function Person({isLoggedIn}) {
         </button>
       </Link>
       </div>
+
+      
     </div>
 
   )

@@ -5,7 +5,7 @@ import axios from "axios"
 export default function AddBirthday({ userDetails }) {
   const token = localStorage.getItem("access_token")
   const [selectedFile, setSelectedFile] = useState(null)
-  const [formSubmitted, setFormSubmitted] = useState(false)
+  // const [formSubmitted, setFormSubmitted] = useState(false)
 
   const navigate = useNavigate()
 

@@ -52,14 +52,13 @@ function App() {
       console.log("Logged in")
       fetchData()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn])
 
   return (
     <>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2/dist/tailwind.min.css" rel="stylesheet"/>
-
-      <div className='App container mx-auto sm:max-w-sm lg:max-w-full
-      bg-gray-100 px-5 py-5 text-blue-800' data-theme="aqua">
+      <div className='App container'>
+        <div className='appContainer container w-80'>
         <NavBar isLoggedIn={ isLoggedIn } />
         <Routes>
           <Route path="/" element={ <Home isLoggedIn={ isLoggedIn } /> } />
@@ -77,6 +76,7 @@ function App() {
           <Route path="/wishlist/person/add" element={<CreateWishPerson isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
           <Route path="/wish/edit/:id" element={<EditWish isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
         </Routes>
+        </div>
       </div>
     </>
   )

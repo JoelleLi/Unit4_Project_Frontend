@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useUsers } from "../context/UserContext"
 
 export default function SignUp() {
-    const [errorMessage, setErrorMessage] = useState("")
+    // const [errorMessage, setErrorMessage] = useState("")
     const [formData, setFormData] = useState({
         username: "",
         first_name: "",
@@ -98,7 +98,7 @@ export default function SignUp() {
 
   return (
     <div>
-        <div>SignUp</div>
+        <h1>SignUp</h1>
         <form className="w-full max-w-lg" onSubmit={handleSubmit} >
             <div className="flex flex-wrap -mx-3 mb-6">
                 <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">

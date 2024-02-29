@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import axios from "axios";
 
 export default function WishCard({ wish }) {
-  const token = localStorage.getItem("access_token")
+//   const token = localStorage.getItem("access_token")
   const [wishImages, setWishImages] = useState("")
 
   async function fetchData() {
@@ -12,7 +12,7 @@ export default function WishCard({ wish }) {
             const imagesResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/photos/${wish.images[0]}`, {
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
+                    // "Authorization": `Bearer ${token}`
                 }
             });
             const imagesData = imagesResponse.data
@@ -25,15 +25,22 @@ export default function WishCard({ wish }) {
 }
 
 useEffect(() => {
-    fetchData()   
+    fetchData()  
+// eslint-disable-next-line react-hooks/exhaustive-deps 
 }, [])
 
   return (
     <div className="flex">
-        <img className="h-10 w-10 rounded-full border" src={wishImages.url} alt="" />
-        <p>{wish.name}</p> &nbsp;|
-        &nbsp;
-        <p>Priority: {wish.priority}</p>
+
+        <div className="avatar">
+        <div className="w-24 rounded">
+            <img src={wishImages.url} alt=""/>
+        </div>
+        </div>
+        <div>
+            <p>{wish.name}</p>
+            <p>Priority: {wish.priority}</p>
+        </div>
     </div>
   )
 }
