@@ -5,7 +5,7 @@ import "./NavBar.css";
 export default function NavBar({ isLoggedIn }) {
   const { username } = useUsers()
   return (
-    <>
+    <div className="mb-4">
       <ul className="menu menu-horizontal bg-base-200 rounded-box">
         <li>
           <Link to="/">
@@ -13,7 +13,7 @@ export default function NavBar({ isLoggedIn }) {
           </Link>
         </li>
 
-        <Link to="/user">
+        <Link to={`/user/${username}`}>
           <li>
             <img src="https://images.rawpixel.com/image_png_800/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvdjkzNy1hZXctMTY1LnBuZw.png" alt="" width="53vmin"/>
           </li>
@@ -44,6 +44,6 @@ export default function NavBar({ isLoggedIn }) {
       </Link> 
       } */}
       </ul>
-    </>
+    </div>
   );
 }

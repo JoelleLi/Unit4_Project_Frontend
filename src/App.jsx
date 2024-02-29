@@ -21,9 +21,7 @@ import EditWish from './pages/EditWish/EditWish'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [userDetails, setUserDetails] = useState({})
-
-  const { username, setUserFirstName } = useUsers()
+  const { username, setUserFirstName, setUserDetails, userDetails } = useUsers()
 
   const token = localStorage.getItem("access_token")
   async function fetchData() {
@@ -32,7 +30,7 @@ function App() {
         {
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}` // Include access token in the request headers
+            // "Authorization": `Bearer ${token}` // Include access token in the request headers
           }
         }
         )
@@ -58,24 +56,26 @@ function App() {
   return (
     <>
       <div className='App container'>
-        <div className='appContainer container w-80'>
+        <div className='appContainer container w-80 mt-5'>
         <NavBar isLoggedIn={ isLoggedIn } />
-        <Routes>
-          <Route path="/" element={ <Home isLoggedIn={ isLoggedIn } /> } />
-          <Route path="/user" element={ <UserProfile isLoggedIn={ isLoggedIn } />} />
-          <Route path="/people" element={ <People isLoggedIn={ isLoggedIn } />} />
-          <Route path="/people/:id" element={ <Person isLoggedIn={ isLoggedIn } />} />
-          <Route path="/editperson/:id" element={ <EditPerson isLoggedIn={ isLoggedIn } userDetails={userDetails}/>} />
-          <Route path="/logout" element={<Logout isLoggedIn={ isLoggedIn } />} />
-          <Route path="/addbirthday" element={<AddBirthday isLoggedIn={ isLoggedIn } userDetails={ userDetails } />} />
-          <Route path="/editprofile" element={<EditUserProfile isLoggedIn={ isLoggedIn } userDetails={ userDetails } />} />
-          <Route path="/wishlist/:username" element={<WishList isLoggedIn={ isLoggedIn } />} />
-          <Route path="/wishlist/person/:id" element={<WishListPerson isLoggedIn={ isLoggedIn } />} />
-          <Route path="/wishlist/wish/:id" element={<Wish isLoggedIn={ isLoggedIn } />} />
-          <Route path="/wishlist/add" element={<CreateWish isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
-          <Route path="/wishlist/person/add" element={<CreateWishPerson isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
-          <Route path="/wish/edit/:id" element={<EditWish isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
-        </Routes>
+          <div className="container mx-auto">
+          <Routes>
+            <Route path="/" element={ <Home isLoggedIn={ isLoggedIn } /> } />
+            <Route path="/user/:username" element={ <UserProfile isLoggedIn={ isLoggedIn } />} />
+            <Route path="/people" element={ <People isLoggedIn={ isLoggedIn } />} />
+            <Route path="/people/:id" element={ <Person isLoggedIn={ isLoggedIn } userDetails={userDetails} />} />
+            <Route path="/editperson/:id" element={ <EditPerson isLoggedIn={ isLoggedIn } userDetails={userDetails}/>} />
+            <Route path="/logout" element={<Logout isLoggedIn={ isLoggedIn } />} />
+            <Route path="/addbirthday" element={<AddBirthday isLoggedIn={ isLoggedIn } userDetails={ userDetails } />} />
+            <Route path="/editprofile" element={<EditUserProfile isLoggedIn={ isLoggedIn } userDetails={ userDetails } />} />
+            <Route path="/wishlist/:username" element={<WishList isLoggedIn={ isLoggedIn } />} />
+            <Route path="/wishlist/person/:id" element={<WishListPerson isLoggedIn={ isLoggedIn } />} />
+            <Route path="/wishlist/wish/:id" element={<Wish isLoggedIn={ isLoggedIn } />} />
+            <Route path="/wishlist/add" element={<CreateWish isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
+            <Route path="/wishlist/person/add" element={<CreateWishPerson isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
+            <Route path="/wish/edit/:id" element={<EditWish isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
+          </Routes>
+          </div>
         </div>
       </div>
     </>

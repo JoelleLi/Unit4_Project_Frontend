@@ -30,7 +30,7 @@ export default function NoticeBoard({nextBirthdays}) {
                 
                 return (
                   <li className="pt-1 pb-1" key={index}>
-                    <div className="badge primary-content badge-outline">{formattedBirthday}</div>
+                    <div className="badge primary-content badge-outline bg-neutral">{formattedBirthday}</div>
                   </li>
                 );
               })}

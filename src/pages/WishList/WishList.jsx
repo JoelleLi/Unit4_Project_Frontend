@@ -35,7 +35,7 @@ export default function WishList() {
 
   return (
     <div>
-    <div>My WishList</div>
+    <h3>{username}'s WishList</h3>
     {wishList.length > 0
     ?
     <div className="p-6 divide-y divide-slate-200">

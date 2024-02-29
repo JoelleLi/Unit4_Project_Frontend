@@ -40,6 +40,14 @@ useEffect(() => {
         <div>
             <p>{wish.name}</p>
             <p>Priority: {wish.priority}</p>
+            <div>
+            {wish.reserved
+            ?
+            <p>Reserved ✅</p>
+            :
+            <p>Reserved ❌</p>
+            }
+            </div>
         </div>
     </div>
   )

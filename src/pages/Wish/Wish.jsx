@@ -6,6 +6,7 @@ export default function Wish({ isLoggedIn }) {
   const token = localStorage.getItem("access_token");
   const [wish, setWish] = useState({});
   const [wishImages, setWishImages] = useState("");
+  const [reservedChecked, setReservedChecked] = useState(false);
   const { id } = useParams();
 
   async function fetchData() {
@@ -20,13 +21,12 @@ export default function Wish({ isLoggedIn }) {
         }
       );
       setWish(singleWish.data);
-      console.log(singleWish.data);
 
       if (singleWish.data.images && singleWish.data.images.length > 0) {
-        for (let i = 0; i < singleWish.data.images.length; i++) {
-          try {
-            const imagesResponse = await axios.get(
-              `${process.env.REACT_APP_BACKEND_URL}/photos/${singleWish.data.images[i]}`,
+        const imagesData = await Promise.all(
+          singleWish.data.images.map(async (imageId) => {
+            const response = await axios.get(
+              `${process.env.REACT_APP_BACKEND_URL}/photos/${imageId}`,
               {
                 headers: {
                   "Content-Type": "application/json",
@@ -34,14 +34,10 @@ export default function Wish({ isLoggedIn }) {
                 },
               }
             );
-            const imagesData = imagesResponse.data;
-            console.log(imagesData);
-            setWishImages((prevImages) => [...prevImages, imagesData]);
-            console.log(wishImages);
-          } catch (error) {
-            console.log(error);
-          }
-        }
+            return response.data;
+          })
+        );
+        setWishImages(imagesData);
       } else {
         console.log("No images");
       }
@@ -51,35 +47,44 @@ export default function Wish({ isLoggedIn }) {
   }
 
   useEffect(() => {
-    fetchData()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    fetchData();
+    setReservedChecked(wish.reserved || false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  useEffect(() => {
+    updateReserved();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reservedChecked]);
+
+  async function updateReserved() {
+    try {
+      const response = await axios.put(
+        `${process.env.REACT_APP_BACKEND_URL}/wishlist/wish/${id}/`,
+        {
+          reserved: reservedChecked,
+          name: wish.name,
+          priority: wish.priority,
+          // Add other fields if needed
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Include access token in the request headers
+          },
+          withCredentials: true,
+        }
+      );
+      if (response.status === 200) {
+        console.log("Wish reserved status updated successfully");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <div>
-      {/* <p>{wish.name}</p>
-      <div id="wishesGrid">
-        {wishImages ? 
-        wishImages.map(image => (
-        <img src={image.url} alt="" width="100vmin"/>
-        ))
-        : 
-        <div>This wish does not have an image uploaded</div>
-        }
-      </div>
-      <p>Desc: {wish.description}</p>
-      <p>Link: {wish.url}</p>
-      <p>Priority: {wish.priority}</p>
-
-      {isLoggedIn
-      ?
-        <Link to={`/wish/edit/${wish.id}/`} >
-          <button>Edit Wish</button>
-        </Link>
-      :
-      <></>
-      } */}
-
       <p>{wish.name}</p>
       <div id="wishesGrid">
         {wishImages ? (
@@ -106,6 +111,21 @@ export default function Wish({ isLoggedIn }) {
           <div>This wish does not have an image uploaded</div>
         )}
       </div>
+
+      <label className="swap swap-flip ml-1">
+        {/* Hidden checkbox to control the state */}
+        <input
+          type="checkbox"
+          checked={reservedChecked}
+          onChange={() => setReservedChecked((prevState) => !prevState)}
+        />
+        Reserve
+        {/* Emoji for when checkbox is checked */}
+        <div className="swap-on">✅</div>
+        {/* Emoji for when checkbox is unchecked */}
+        <div className="swap-off">❌</div>
+      </label>
+
       <p>Desc: {wish.description}</p>
       <p>Link: {wish.url}</p>
       <p>Priority: {wish.priority}</p>

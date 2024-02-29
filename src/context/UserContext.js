@@ -1,5 +1,5 @@
 import { useContext, createContext, useState, useEffect } from "react"
-// import axios from "axios"
+import axios from "axios"
 
 const UserContext = createContext()
 
@@ -11,6 +11,7 @@ export const UsersProvider = ({children}) => {
     const [username, setUsername] = useState(null)
     const [userFirstName, setUserFirstName] = useState([])
     const [userProfile, setUserProfile] = useState({})
+    const [userDetails, setUserDetails] = useState({})
 
     useEffect(() => {
         // Initialize username from local storage
@@ -21,6 +22,25 @@ export const UsersProvider = ({children}) => {
         }
     }, [])
 
+    async function getUser() {
+        try {
+            const userResponse = await axios.get(`http://localhost:8000/users/${username}`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                // "Authorization": `Bearer ${token}` // Include access token in the request headers
+              }
+            }
+            )
+            setUserDetails(userResponse.data)
+            
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
+
     return (
         <UserContext.Provider value={{
             username,
@@ -28,7 +48,10 @@ export const UsersProvider = ({children}) => {
             userFirstName,
             setUserFirstName,
             userProfile,
-            setUserProfile
+            setUserProfile,
+            userDetails,
+            setUserDetails,
+            getUser
         }}
         >
             {children}
