@@ -87,7 +87,7 @@ export default function PersonCard({ person }) {
           )}
           <div className="flex flex-col content-center ml-5" id="cardInfo">
           <h5 className="text-primary-content">{person.first_name} {person.first_name.charAt(0).toUpperCase()}</h5>
-          <h5 className="text-primary-content">{formatBirthdayMessage()}</h5>
+          <p className="text-primary-content">{formatBirthdayMessage()}</p>
           <div className="flex flex-row">
             {person.card
             ?

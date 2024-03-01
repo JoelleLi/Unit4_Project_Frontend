@@ -1,18 +1,18 @@
-import { Link, useNavigate } from "react-router-dom"
-import { useState, useEffect } from "react"
-import { usePersons } from "../../context/PersonContext"
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { usePersons } from "../../context/PersonContext";
 import axios from "axios";
 
-export default function EditPerson({userDetails}) {
-  const token = localStorage.getItem("access_token")
-  const [selectedFile, setSelectedFile] = useState(null)
-  const [setFormSubmitted] = useState(false)
-  const [profileImage, setProfileImage] = useState("")
-  const [profileImageId, setProfileImageId] = useState()
+export default function EditPerson({ userDetails }) {
+  const token = localStorage.getItem("access_token");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [setFormSubmitted] = useState(false);
+  const [profileImage, setProfileImage] = useState("");
+  const [profileImageId, setProfileImageId] = useState();
 
-  const { person, setPerson } = usePersons()
+  const { person, setPerson } = usePersons();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     first_name: person.first_name,
@@ -26,17 +26,17 @@ export default function EditPerson({userDetails}) {
     brands: person.brands,
     likes_surprises: person.likes_surprises,
     drinks_alcohol: person.drinks_alcohol,
-    created_by: userDetails.id
-  })
+    created_by: userDetails.id,
+  });
 
   function handleChange(e) {
-    const { name, value } = e.target
-    setFormData(prevFormData => ({ ...prevFormData, [name]: value }))
-    console.log(formData)
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+    console.log(formData);
   }
 
   async function saveEdit(formData, e) {
-    e.preventDefault()
+    e.preventDefault();
     const body = {
       first_name: formData.first_name,
       last_name: formData.last_name,
@@ -49,96 +49,107 @@ export default function EditPerson({userDetails}) {
       brands: formData.brands,
       likes_surprises: formData.likes_surprises,
       drinks_alcohol: formData.drinks_alcohol,
-      created_by: userDetails.id
-    }
-    console.log(body)
+      created_by: userDetails.id,
+    };
+    console.log(body);
 
     try {
-      const response = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/persons/profile/${person.id}/`, body, 
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` // Include access token in the request headers
-        }, 
-        withCredentials: true
-      })
+      const response = await axios.put(
+        `${process.env.REACT_APP_BACKEND_URL}/persons/profile/${person.id}/`,
+        body,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Include access token in the request headers
+          },
+          withCredentials: true,
+        }
+      );
       if (response.status === 200) {
-      setPerson(prevPersonDetails => ({
-        ...prevPersonDetails,
-        ...body
-      }))
-      setFormData(body)
-      setFormSubmitted(true) 
-      console.log("Form submitted successfully", body)
-    }
+        setPerson((prevPersonDetails) => ({
+          ...prevPersonDetails,
+          ...body,
+        }));
+        setFormData(body);
+        setFormSubmitted(true);
+        console.log("Form submitted successfully", body);
+      }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-    navigate(`/people/${person.id}`)
-
+    navigate(`/people/${person.id}`);
   }
 
   const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0])
-  }
+    setSelectedFile(event.target.files[0]);
+  };
 
   const handleSubmit = async (event) => {
-    event.preventDefault()
-    
+    event.preventDefault();
+
     // Create a FormData object to append the selected file
-    const formData = new FormData()
-    formData.append(
-      'photo-file', selectedFile
-      )
+    const formData = new FormData();
+    formData.append("photo-file", selectedFile);
 
     try {
       // Send a POST request to upload the photo
-      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/persons/${person.id}/add_photo/`, formData, 
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          "Authorization": `Bearer ${token}` // Include access token in the request headers
-        }
-      })
-      
-      // Optionally, perform additional actions after successful upload
-      console.log('Photo uploaded successfully!')
-      console.log(profileImageId)
-
-      if (profileImageId) {
-        await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/photos/${profileImageId}/delete/`, formData, 
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/persons/${person.id}/add_photo/`,
+        formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
-            "Authorization": `Bearer ${token}` // Include access token in the request headers
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // Include access token in the request headers
+          },
+        }
+      );
+
+      // Optionally, perform additional actions after successful upload
+      console.log("Photo uploaded successfully!");
+      console.log(profileImageId);
+
+      if (profileImageId) {
+        await axios.delete(
+          `${process.env.REACT_APP_BACKEND_URL}/photos/${profileImageId}/delete/`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`, // Include access token in the request headers
+            },
           }
-        })
-        
-        console.log("Old image deleted successfully, old id: ")
+        );
+
+        console.log("Old image deleted successfully, old id: ");
       }
 
-      const updatedPersonResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/persons/profile/${person.id}/`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        }
-      })
-      if (updatedPersonResponse.data.image) {
-        const photoResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/photos/${updatedPersonResponse.data.image}`, {
+      const updatedPersonResponse = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/persons/profile/${person.id}/`,
+        {
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (updatedPersonResponse.data.image) {
+        const photoResponse = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}/photos/${updatedPersonResponse.data.image}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
           }
-        });
+        );
         const photoData = photoResponse.data;
         setProfileImageId(updatedPersonResponse.data.image);
         setProfileImage(photoData.url);
       }
-
     } catch (error) {
-      console.error('Error uploading photo:', error)
+      console.error("Error uploading photo:", error);
     }
-  }
+  };
 
   async function deletePerson() {
     try {
@@ -164,56 +175,70 @@ export default function EditPerson({userDetails}) {
 
   async function fetchData() {
     if (person.image) {
-      const photoResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/photos/${person.image}`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+      const photoResponse = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/photos/${person.image}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
-      })
-      const photoData = photoResponse.data
-      setProfileImageId(person.image)
-      setProfileImage(photoData.url)
+      );
+      const photoData = photoResponse.data;
+      setProfileImageId(person.image);
+      setProfileImage(photoData.url);
     }
   }
 
   useEffect(() => {
-    fetchData()
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
-
-  const today = new Date()
-  const formattedDate = today.toISOString().split('T')[0]
+  const today = new Date();
+  const formattedDate = today.toISOString().split("T")[0];
 
   return (
     <div>
-        <div>Edit {person.first_name} {person.last_name}</div>
-
-        <div>
-        {profileImage ? 
-        <div>
-        <img src={profileImage} alt="" width="100vmin" />
-        <form onSubmit={handleSubmit}>
-        <input type="file" name="photo-file" onChange={handleFileChange} />
-        <br /><br/>
-        <button type="submit">Change Photo</button>
-        </form>
-        </div>
-        :
-        <form onSubmit={handleSubmit}>
-        <input type="file" name="photo-file" onChange={handleFileChange} />
-        <br /><br/>
-        <button type="submit">Upload Photo</button>
-        </form>
-        }
-
+      <div>
+        Edit {person.first_name} {person.last_name}
       </div>
 
-        <form onSubmit={(e) => saveEdit(formData, e)} >
+      <div>
+        {profileImage ? (
+          <div>
+            <div className="avatar">
+              <div className="w-24 rounded-full m-3">
+                <img src={profileImage} alt="User Profile Avatar" />
+              </div>
+            </div>
+            <form onSubmit={handleSubmit}>
+              <input
+                onChange={handleFileChange}
+                type="file"
+                name="photo-file"
+                className="file-input file-input-bordered file-input-xs w-full max-w-xs"
+              />
+              <br />
+              <br />
+              <button type="submit" className="btn btn-xs">Update Photo</button>
+            </form>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <input type="file" name="photo-file" onChange={handleFileChange} />
+            <br />
+            <br />
+            <button type="submit">Upload Photo</button>
+          </form>
+        )}
+      </div>
+
+      <form onSubmit={(e) => saveEdit(formData, e)}>
         <div className="">
           <div className="border-b border-gray-900/10 pb-3">
             <h2 className="text-base font-semibold leading-7 text-gray-900">
-            Add Birthday
+              Add Birthday
             </h2>
 
             <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -222,7 +247,7 @@ export default function EditPerson({userDetails}) {
                   htmlFor="photo"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                Photo
+                  Photo
                 </label>
                 <div className="mt-2 flex items-center gap-x-3">
                   <svg
@@ -237,7 +262,6 @@ export default function EditPerson({userDetails}) {
                       clipRule="evenodd"
                     />
                   </svg>
-
                 </div>
               </div>
             </div>
@@ -310,7 +334,7 @@ export default function EditPerson({userDetails}) {
                   htmlFor="birthday"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                Birthday
+                  Birthday
                 </label>
                 <div className="mt-2">
                   <input
@@ -476,30 +500,29 @@ export default function EditPerson({userDetails}) {
           </div>
         </div>
 
-        <div className="mt- flex items-center justify-end gap-x-6">
+        <div className="mt-5 mb-5 flex items-center justify-center gap-x-6">
           <Link to={`/people/${person.id}`}>
             <button
               type="button"
-              className="text-sm font-semibold leading-6 text-gray-900"
+              className="btn btn-outline"
             >
               Cancel
             </button>
           </Link>
           <button
             type="submit"
-            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="btn btn-outline"
           >
             Save Person
           </button>
         </div>
         <button
-            type="button"
-            onClick={deletePerson}
-            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Delete Person
-          </button>
+          type="button"
+          onClick={deletePerson}
+          className="btn btn-outline btn-warning m-2">
+          Delete Person
+        </button>
       </form>
     </div>
-  )
+  );
 }

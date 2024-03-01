@@ -7,7 +7,7 @@ import axios from "axios"
 
 export default function CreateWishPerson({ userDetails }) {
     const token = localStorage.getItem("access_token")
-    const [setFormSubmitted] = useState(false)
+    // const [setFormSubmitted] = useState(false)
     const [selectedFiles, setSelectedFiles] = useState([])
     const { personId } = usePersons()
     const [formData, setFormData] = useState({})
@@ -52,7 +52,7 @@ export default function CreateWishPerson({ userDetails }) {
             withCredentials: true
           })
           if (response) {      
-            setFormSubmitted(true) 
+            // setFormSubmitted(true) 
             console.log("Form submitted successfully", body)
             console.log(response.data.id)
     
@@ -120,12 +120,12 @@ export default function CreateWishPerson({ userDetails }) {
                  
                   <input type="file" name="photo-file" onChange={handleFileChange} multiple/>
                   <br /><br/>
-                  <button
+                  {/* <button
                     type="submit"
                     className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                   >
                     Upload Image
-                  </button>
+                  </button> */}
                
 
 

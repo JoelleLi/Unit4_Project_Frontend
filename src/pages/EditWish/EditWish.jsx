@@ -1,72 +1,78 @@
-import { useParams, useNavigate } from "react-router-dom"
-import { useState, useEffect } from "react"
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import axios from "axios";
+import "./EditWish.css";
 
 export default function EditWish() {
-  const token = localStorage.getItem("access_token")
-  const [wish, setWish] = useState({})
-  const [wishImages, setWishImages] = useState([])
-  const [selectedFile, setSelectedFile] = useState(null)
-  const [setFormSubmitted] = useState(false)
-  const { id } = useParams()
-  const navigate = useNavigate()
+  const token = localStorage.getItem("access_token");
+  const [wish, setWish] = useState({});
+  const [wishImages, setWishImages] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [setFormSubmitted] = useState(false);
+  const { id, username } = useParams();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: '',
-    url: '',
-    description: '',
+    name: "",
+    url: "",
+    description: "",
     reserved: false,
-    priority: ''
-  })
+    priority: "",
+  });
 
   async function fetchData() {
     try {
-        const singleWish = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/wishlist/wish/${id}`, {
+      const singleWish = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/wishlist/wish/${id}`,
+        {
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}` // Include access token in the request headers
-          }
-        });
-        setWish(singleWish.data);
-        setFormData({
-          name: singleWish.data.name,
-          url: singleWish.data.url,
-          description: singleWish.data.description,
-          reserved: singleWish.data.reserved,
-          priority: singleWish.data.priority
-        });
-        console.log(singleWish.data);
-        setWishImages([]);
-
-        if (singleWish.data.images && singleWish.data.images.length > 0) {
-          for (let i = 0; i < singleWish.data.images.length; i++){
-            try {
-              const imagesResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/photos/${singleWish.data.images[i]}`, {
-                  headers: {
-                      "Content-Type": "application/json",
-                      "Authorization": `Bearer ${token}`
-                  }
-              });
-              const imagesData = imagesResponse.data;
-              console.log(imagesData);
-              setWishImages((prevImages) => [...prevImages, imagesData]);
-              console.log(wishImages);
-
-            } catch (error) {
-              console.log(error);
-            }
-          }
-        } else {
-          console.log("No images");
+            Authorization: `Bearer ${token}`, // Include access token in the request headers
+          },
         }
+      );
+      setWish(singleWish.data);
+      setFormData({
+        name: singleWish.data.name,
+        url: singleWish.data.url,
+        description: singleWish.data.description,
+        reserved: singleWish.data.reserved,
+        priority: singleWish.data.priority,
+      });
+      console.log(singleWish.data);
+      setWishImages([]);
+
+      if (singleWish.data.images && singleWish.data.images.length > 0) {
+        for (let i = 0; i < singleWish.data.images.length; i++) {
+          try {
+            const imagesResponse = await axios.get(
+              `${process.env.REACT_APP_BACKEND_URL}/photos/${singleWish.data.images[i]}`,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+            const imagesData = imagesResponse.data;
+            console.log(imagesData);
+            setWishImages((prevImages) => [...prevImages, imagesData]);
+            console.log(wishImages);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      } else {
+        console.log("No images");
+      }
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
   }
 
   useEffect(() => {
-    fetchData()
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   const handleDeleteImage = async (imageId) => {
     try {
@@ -85,42 +91,44 @@ export default function EditWish() {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
-  }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+
     // Create a FormData object to append the selected file
     const formData = new FormData();
-    formData.append('photo-file', selectedFile);
+    formData.append("photo-file", selectedFile);
 
     try {
       // Send a POST request to upload the photo
-      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/wish/${wish.id}/add_photo/`, formData, 
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          "Authorization": `Bearer ${token}` // Include access token in the request headers
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/wish/${wish.id}/add_photo/`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // Include access token in the request headers
+          },
         }
-      });
+      );
       fetchData();
       // Optionally, perform additional actions after successful upload
-      console.log('Photo uploaded successfully!');
-
+      console.log("Photo uploaded successfully!");
     } catch (error) {
-      console.error('Error uploading photo:', error);
+      console.error("Error uploading photo:", error);
     }
-  }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
+    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
     console.log(formData);
-  }
+  };
 
   async function saveEdit(formData, e) {
     e.preventDefault();
@@ -129,26 +137,29 @@ export default function EditWish() {
       url: formData.url,
       description: formData.description,
       reserved: formData.reserved,
-      priority: formData.priority
+      priority: formData.priority,
     };
     console.log(body);
 
     try {
-      const response = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/wishlist/wish/${id}/`, body, 
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` // Include access token in the request headers
-        }, 
-        withCredentials: true
-      });
+      const response = await axios.put(
+        `${process.env.REACT_APP_BACKEND_URL}/wishlist/wish/${id}/`,
+        body,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Include access token in the request headers
+          },
+          withCredentials: true,
+        }
+      );
       if (response.status === 200) {
-        setWish(prevWish => ({
+        setWish((prevWish) => ({
           ...prevWish,
-          ...body
+          ...body,
         }));
         setFormData(body);
-        setFormSubmitted(true); 
+        setFormSubmitted(true);
         console.log("Form submitted successfully", body);
       }
     } catch (error) {
@@ -180,26 +191,52 @@ export default function EditWish() {
 
   return (
     <div>
-      <p>{wish.name}</p>
+      <h5 className="mb-3">{wish.name}</h5>
       <p>Add photos</p>
-      <form onSubmit={handleSubmit}>
-        <input type="file" name="photo-file" onChange={handleFileChange} />
-        <br /><br/>
-        <button type="submit">Upload Photo</button>
-      </form>
+      <div className="fileInputWrapper">
+        <form onSubmit={handleSubmit}>
+          <input type="file" name="photo-file" onChange={handleFileChange} />
+          <br />
+          <br />
+          {selectedFile ? (
+            <button type="submit" className="btn btn-xs">
+              Upload Photo
+            </button>
+          ) : (
+            <></>
+          )}
+        </form>
+      </div>
 
-      <div id="wishesGrid">
+      <div id="wishesGrid" className="grid grid-cols-3 mt-4">
         {wishImages.length > 0 ? (
           wishImages.map((image) => (
             <div key={image.id}>
-              <img src={image.url} alt="" width="100vmin" />
-              <button onClick={() => handleDeleteImage(image.id)}>
-                Delete Image
-              </button>
+              <div className="indicator">
+                <span
+                  id="delImageX"
+                  onClick={() => handleDeleteImage(image.id)}
+                  className="indicator-item badge badge-secondary"
+                >
+                  x
+                </span>
+
+                <img src={image.url} alt="" width="90vmin" />
+              </div>
             </div>
           ))
         ) : (
-          <div>This wish does not have an image uploaded</div>
+          <>
+          <div className="avatar placeholder" >
+            <div className="bg-neutral text-neutral-content w-24 h-24 rounded h-16">
+              <p>No Image</p>
+              <p>👀</p>
+            </div>
+          </div>
+  
+      </>
+          
+          
         )}
       </div>
 
@@ -207,23 +244,21 @@ export default function EditWish() {
         <div className="">
           <div className="border-b border-gray-900/10 pb-3">
             <h2 className="text-base font-semibold leading-7 text-gray-900">
-              Add a Wish
+              Edit Wish
             </h2>
             <p className="mt-1 text-sm leading-6 text-gray-600">
               This information will be displayed publicly.
             </p>
-
           </div>
 
           <div className="border-b border-gray-900/10 pb-3">
             <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-6">
-
               <div className="col-span-full">
                 <label
                   htmlFor="name"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                Wish Name
+                  Wish Name
                 </label>
                 <div className="mt-2">
                   <input
@@ -243,7 +278,7 @@ export default function EditWish() {
                   htmlFor="url"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                Link (optional)
+                  Link (optional)
                 </label>
                 <div className="mt-2">
                   <input
@@ -263,7 +298,7 @@ export default function EditWish() {
                   htmlFor="description"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                Description (optional)
+                  Description (optional)
                 </label>
                 <div className="mt-2">
                   <input
@@ -278,14 +313,19 @@ export default function EditWish() {
                 </div>
               </div>
 
-             <div className="flex items-center mb-4">
+              <div className="flex items-center mb-4">
                 <input
                   id="reserved"
                   type="checkbox"
                   checked={formData.reserved}
                   name="reserved"
                   autoComplete="reserved"
-                  onChange={(e) => setFormData(prevState => ({ ...prevState, reserved: e.target.checked }))}
+                  onChange={(e) =>
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      reserved: e.target.checked,
+                    }))
+                  }
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 />
                 <label
@@ -301,9 +341,9 @@ export default function EditWish() {
                   htmlFor="priority"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                Priority
+                  Priority
                 </label>
-                <div className="mt-2">
+                <div className="mt-2 mb-2">
                   <select
                     id="priority"
                     name="priority"
@@ -323,18 +363,24 @@ export default function EditWish() {
           </div>
         </div>
 
-        <div className="mt- flex items-center justify-end gap-x-6">
-          <button
-            type="submit"
-            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
+        <div className="mt- flex items-center justify-center gap-x-6 m-3">
+          {/* <Link to={`/wishlist/wish/${username}/${wish.id}`}> */}
+          <Link to={`/wishlist/wish/${username}/${id}`}>
+            <button className="btn btn-outline">Back</button>
+          </Link>
+          <button type="submit" className="btn btn-outline">
             Save
           </button>
         </div>
       </form>
 
-      <div>{wish.description}</div>
-      <button type="button" onClick={deleteWish}>Delete Wish</button>
+      <button
+        type="button"
+        className="btn btn-outline btn-warning m-2"
+        onClick={deleteWish}
+      >
+        Delete Wish
+      </button>
     </div>
   );
 }

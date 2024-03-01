@@ -103,15 +103,15 @@ export default function UserProfile({ isLoggedIn }) {
         {userProfile.image ? (
           <span className="">
             <div className="avatar">
-              <div className="w-24 rounded-full m-3">
-                <img src={profileImage} alt="User Profile Avatar" />
+              <div className="w-24 rounded-full mt-6">
+                <img src={profileImage} alt="user avatar" />
               </div>
             </div>
           </span>
         ) : (
           <>
-                      <span>
-          <div className="avatar placeholder m-3 mt-7">
+        <span>
+          <div className="avatar placeholder mt-6">
               <div className="bg-neutral text-neutral-content rounded-full w-24">
                 <span className="text-3xl">
                   {userDetails.first_name
@@ -127,7 +127,7 @@ export default function UserProfile({ isLoggedIn }) {
 
         <div className="card-body">
           {isLoggedIn ? <h3 className="card-title">Hi, {userDetails.first_name}</h3>
-          : <h3>{username}'s Profile</h3>}
+          : <h3><strong>{username}'s Profile</strong></h3>}
 
           <div className="flex flex-row">
             <div className="badge badge-outline">My Birthday</div>
@@ -186,10 +186,14 @@ export default function UserProfile({ isLoggedIn }) {
       </div>
 
       {/* <p>{formatBirthdayMessage()}</p> */}
-
-      <Link to="/logout">
-        <button className="btn btn-outline m-4">Log Out</button>
-      </Link>
+              {isLoggedIn?
+              <Link to="/logout">
+              <button className="btn btn-outline m-4">Log Out</button>
+            </Link>
+              :
+              <></>
+              }
+      
     </>
   );
 }

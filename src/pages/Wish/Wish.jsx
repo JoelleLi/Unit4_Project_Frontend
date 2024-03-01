@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
-export default function Wish({ isLoggedIn }) {
-  const token = localStorage.getItem("access_token");
+export default function Wish({ isLoggedIn, personId }) {
+  // const token = localStorage.getItem("access_token");
   const [wish, setWish] = useState({});
   const [wishImages, setWishImages] = useState("");
   const [reservedChecked, setReservedChecked] = useState(false);
-  const { id } = useParams();
-
+  const { id, username } = useParams();
+  const navigate = useNavigate()
   async function fetchData() {
     try {
       const singleWish = await axios.get(
@@ -16,7 +16,7 @@ export default function Wish({ isLoggedIn }) {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Include access token in the request headers
+            // Authorization: `Bearer ${token}`, // Include access token in the request headers
           },
         }
       );
@@ -30,7 +30,7 @@ export default function Wish({ isLoggedIn }) {
               {
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
+                  // Authorization: `Bearer ${token}`,
                 },
               }
             );
@@ -70,9 +70,9 @@ export default function Wish({ isLoggedIn }) {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Include access token in the request headers
+            // Authorization: `Bearer ${token}`, // Include access token in the request headers
           },
-          withCredentials: true,
+          // withCredentials: true,
         }
       );
       if (response.status === 200) {
@@ -85,10 +85,10 @@ export default function Wish({ isLoggedIn }) {
 
   return (
     <div>
-      <p>{wish.name}</p>
+      <h5>{wish.name}</h5>
       <div id="wishesGrid">
         {wishImages ? (
-          <div className="carousel w-full">
+          <div className="carousel w-full mt-4 mb-4">
             {wishImages.map((image, idx) => (
               <div
                 id={`slide${idx + 1}`}
@@ -97,10 +97,16 @@ export default function Wish({ isLoggedIn }) {
               >
                 <img src={image.url} className="w-full" alt="" />
                 <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                  <a href={`#slide${idx}`} className="btn btn-circle">
+                  <a
+                    href={`#slide${idx}`}
+                    className="btn btn-circle w-4 bg-secondary"
+                  >
                     ❮
                   </a>
-                  <a href={`#slide${idx + 2}`} className="btn btn-circle">
+                  <a
+                    href={`#slide${idx + 2}`}
+                    className="btn btn-circle w-4 bg-secondary"
+                  >
                     ❯
                   </a>
                 </div>
@@ -108,34 +114,81 @@ export default function Wish({ isLoggedIn }) {
             ))}
           </div>
         ) : (
-          <div>This wish does not have an image uploaded</div>
+          <div className="avatar placeholder m-4">
+            <div className="bg-neutral text-neutral-content w-24 h-24 rounded h-16">
+              <p>No Image</p>
+              <p>👀</p>
+            </div>
+          </div>
+        )}
+
+        {isLoggedIn ? (
+          <></>
+        ) : (
+          <>
+            <p>Let {username} know you've reserved this wish.</p>
+          </>
         )}
       </div>
 
-      <label className="swap swap-flip ml-1">
-        {/* Hidden checkbox to control the state */}
-        <input
-          type="checkbox"
-          checked={reservedChecked}
-          onChange={() => setReservedChecked((prevState) => !prevState)}
-        />
-        Reserve
-        {/* Emoji for when checkbox is checked */}
-        <div className="swap-on">✅</div>
-        {/* Emoji for when checkbox is unchecked */}
-        <div className="swap-off">❌</div>
-      </label>
+      <div className="flex flex-row content-center justify-center mt-1">
+        <div className="badge badge-accent">Reserved</div>
+        <label className="swap swap-flip ml-1">
+          <input
+            type="checkbox"
+            checked={reservedChecked}
+            onChange={() => setReservedChecked((prevState) => !prevState)}
+          />
+          <div className="swap-on">✅</div>
+          <div className="swap-off">❌</div>
+        </label>
+      </div>
 
-      <p>Desc: {wish.description}</p>
-      <p>Link: {wish.url}</p>
-      <p>Priority: {wish.priority}</p>
+      <div className="flex flex-col gap-3 mt-5 mb-5">
+        <div className="badge badge-outline">Description</div>
 
+        <p className="text-left">{wish.description}</p>
+
+        <div className="badge badge-outline text-left">Link</div>
+
+        <p>{wish.url}</p>
+
+        {wish.priority === "High" ? (
+          <div className="badge badge-error gap-2">Priority: High</div>
+        ) : (
+          <></>
+        )}
+        {wish.priority === "Medium" ? (
+          <div className="badge badge-warning gap-2">Priority: Medium</div>
+        ) : (
+          <></>
+        )}
+        {wish.priority === "Low" ? (
+          <div className="badge badge-success gap-2">Priority: Low</div>
+        ) : (
+          <></>
+        )}
+      </div>
       {isLoggedIn ? (
-        <Link to={`/wish/edit/${wish.id}/`}>
-          <button>Edit Wish</button>
-        </Link>
+        <>
+          <div className="">
+            <Link to={`/wish/edit/${username}/${wish.id}/`}>
+              <button className="btn btn-active btn-neutral m-2">
+                Edit Wish
+              </button>
+            </Link>
+            {/* <Link to={`/wishlist/${username}/`}> */}
+              <button onClick={() => navigate(-1)} className="btn btn-outline m-2">Back</button>
+            {/* </Link> */}
+          </div>
+        </>
       ) : (
-        <></>
+        <div>
+
+        {/* <button className="btn btn-outline m-2" onClick={() => navigate(-2)}>Back</button> */}
+        
+
+        </div>
       )}
     </div>
   );

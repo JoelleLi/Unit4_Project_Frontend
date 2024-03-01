@@ -1,15 +1,16 @@
-.fileInputWrapper {
+/* .fileInputWrapper {
     display: flex;
     flex-direction: column;
     margin-top: 10px;
 }
 input[type="file"]::file-selector-button {
+    align-items: center;
     margin-left: 115px;
     display: flex;
+    flex-direction: column;
     border-radius: 25px;
     font-size: 12px;
     padding: 0 16px;
-    /* height: 40px; */
     cursor: pointer;
     background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.16);
@@ -18,12 +19,10 @@ input[type="file"]::file-selector-button {
     transition: background-color 200ms;
   }
   
-  /* file upload button hover state */
   input[type="file"]::file-selector-button:hover {
     background-color: #f3f4f6;
   }
   
-  /* file upload button active state */
   input[type="file"]::file-selector-button:active {
     background-color: #e5e7eb;
-  }
+  } */

@@ -70,10 +70,11 @@ function App() {
             <Route path="/editprofile" element={<EditUserProfile isLoggedIn={ isLoggedIn } userDetails={ userDetails } />} />
             <Route path="/wishlist/:username" element={<WishList isLoggedIn={ isLoggedIn } />} />
             <Route path="/wishlist/person/:id" element={<WishListPerson isLoggedIn={ isLoggedIn } />} />
+            <Route path="/wishlist/wish/:username/:id" element={<Wish isLoggedIn={ isLoggedIn } />} />
             <Route path="/wishlist/wish/:id" element={<Wish isLoggedIn={ isLoggedIn } />} />
             <Route path="/wishlist/add" element={<CreateWish isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
             <Route path="/wishlist/person/add" element={<CreateWishPerson isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
-            <Route path="/wish/edit/:id" element={<EditWish isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
+            <Route path="/wish/edit/:username/:id" element={<EditWish isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
           </Routes>
           </div>
         </div>

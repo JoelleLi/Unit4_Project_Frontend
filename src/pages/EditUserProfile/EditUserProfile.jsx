@@ -210,15 +210,16 @@ export default function EditUserProfile({ isLoggedIn, userDetails }) {
             </div>
             <div className="fileInputWrapper">
               <form onSubmit={handleSubmit}>
-                <input
+              <input onChange={handleFileChange} type="file" name="photo-file" className="file-input file-input-bordered file-input-xs w-full max-w-xs" />
+
+                {/* <input
                   type="file"
                   name="photo-file"
                   onChange={handleFileChange}
-                />
-                <br />
+                /> */}
                 {selectedFile ? (
-                  <button type="submit" className="btn btn-xs m-3">
-                    Change Photo
+                  <button type="submit" className="btn btn-xs mt-2">
+                    Update Photo
                   </button>
                 ) : (
                   <></>
@@ -267,7 +268,7 @@ export default function EditUserProfile({ isLoggedIn, userDetails }) {
               />
               <br />
               <br />
-              <button type="submit">Upload Photo</button>
+              <button type="submit" className="btn btn-xs mb-3">Upload Photo</button>
             </form>
           </>
         )}
