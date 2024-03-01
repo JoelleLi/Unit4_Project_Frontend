@@ -109,7 +109,20 @@ export default function UserProfile({ isLoggedIn }) {
             </div>
           </span>
         ) : (
-          <p>No image uploaded</p>
+          <>
+                      <span>
+          <div className="avatar placeholder m-3 mt-7">
+              <div className="bg-neutral text-neutral-content rounded-full w-24">
+                <span className="text-3xl">
+                  {userDetails.first_name
+                    ? userDetails.first_name.charAt(0).toUpperCase()
+                    : ""}
+                </span>
+              </div>
+            </div>
+          <p className="">No image uploaded</p>
+          </span>
+          </>
         )}
 
         <div className="card-body">

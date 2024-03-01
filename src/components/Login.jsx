@@ -3,10 +3,9 @@ import { useState } from "react";
 import { useUsers } from "../context/UserContext";
 
 export default function Login() {
-  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const { setUsername: setContextUsername } = useUsers();
+  const { username, setUsername } = useUsers();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,7 +13,6 @@ export default function Login() {
       username: username,
       password: password,
     };
-    setContextUsername(user.username);
 
     const { data } = await axios.post(
       `${process.env.REACT_APP_BACKEND_URL}/api/token/`,

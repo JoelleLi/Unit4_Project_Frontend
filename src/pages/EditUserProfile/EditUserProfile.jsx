@@ -7,7 +7,6 @@ import "./EditUserProfile.css";
 export default function EditUserProfile({ isLoggedIn, userDetails }) {
   const token = localStorage.getItem("access_token");
   const [selectedFile, setSelectedFile] = useState(null);
-  const [setFormSubmitted] = useState(false);
   const [profileId, setProfileId] = useState();
   const [profileImage, setProfileImage] = useState("");
   const [profileImageId, setProfileImageId] = useState();
@@ -66,13 +65,12 @@ export default function EditUserProfile({ isLoggedIn, userDetails }) {
           ...body,
         }));
         setFormData(body);
-        setFormSubmitted(true);
         console.log("Form submitted successfully", body);
       }
     } catch (error) {
       console.error(error);
     }
-    navigate(`/user`);
+    navigate(`/user/${username}`);
   }
 
   const today = new Date();
