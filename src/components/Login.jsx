@@ -1,9 +1,9 @@
 import axios from "axios";
-import { useUsers } from "../context/UserContext";
+// import { useUsers } from "../context/UserContext";
 import { useState } from "react";
 
 export default function Login() {
-  const { username } = useUsers();
+  // const { username } = useUsers();
 
   const [formData, setFormData] = useState({
     username: "",
