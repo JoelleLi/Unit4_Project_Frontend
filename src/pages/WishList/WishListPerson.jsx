@@ -3,13 +3,12 @@ import { Link, useParams } from "react-router-dom"
 import WishCard from "../../components/WishCard/WishCard"
 import axios from "axios"
 import { usePersons } from "../../context/PersonContext"
-import { useUsers } from "../../context/UserContext"
 
 export default function WishList() {
   const token = localStorage.getItem("access_token")
   const [wishList, setWishList] = useState([])
   const { setPersonId, personId } = usePersons()
-  const { username } = useUsers()
+  // const { username } = useUsers()
   const { id } = useParams()
 
   async function fetchData() {
