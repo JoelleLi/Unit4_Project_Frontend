@@ -6,7 +6,7 @@ export default function Wish({ isLoggedIn, personId }) {
   // const token = localStorage.getItem("access_token");
   const [wish, setWish] = useState({});
   const [wishImages, setWishImages] = useState("");
-  const [reservedChecked, setReservedChecked] = useState(false);
+  const [reservedChecked, setReservedChecked] = useState();
   const { id, username } = useParams();
   const navigate = useNavigate()
   async function fetchData() {
@@ -55,7 +55,7 @@ export default function Wish({ isLoggedIn, personId }) {
   useEffect(() => {
     updateReserved();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reservedChecked]);
+  }, [reservedChecked, !reservedChecked]);
 
   async function updateReserved() {
     try {
@@ -185,7 +185,7 @@ export default function Wish({ isLoggedIn, personId }) {
       ) : (
         <div>
 
-        {/* <button className="btn btn-outline m-2" onClick={() => navigate(-2)}>Back</button> */}
+          <button onClick={() => navigate(-1)} className="btn btn-outline m-2">Back</button>
         
 
         </div>
