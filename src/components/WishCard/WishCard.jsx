@@ -4,11 +4,12 @@ import './WishCard.css'
 
 export default function WishCard({ wish }) {
   //   const token = localStorage.getItem("access_token")
-  const [wishImages, setWishImages] = useState("");
+  const [wishImages, setWishImages] = useState("")
+  const firstImage = wish.images[0]
 
   async function fetchData() {
-    if (wish.images) {
-      console.log(wish.images[0]);
+    if (firstImage) {
+      // console.log(wish.images[0]);
       try {
         const imagesResponse = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}/photos/${wish.images[0]}`,
@@ -20,7 +21,7 @@ export default function WishCard({ wish }) {
           }
         );
         const imagesData = imagesResponse.data;
-        console.log(imagesData);
+        // console.log(imagesData);
         setWishImages(imagesData);
       } catch (error) {
         console.log(error);

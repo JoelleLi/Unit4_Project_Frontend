@@ -21,12 +21,13 @@ import EditWish from './pages/EditWish/EditWish'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const { username, setUserFirstName, setUserDetails, userDetails } = useUsers()
+  const { setUserFirstName, setUserDetails, userDetails } = useUsers()
+  const storedUsername = localStorage.getItem('username')
 
   // const token = localStorage.getItem("access_token")
   async function fetchData() {
     try {
-        const userResponse = await axios.get(`http://localhost:8000/users/${username}`,
+        const userResponse = await axios.get(`http://localhost:8000/users/${storedUsername}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -36,7 +37,7 @@ function App() {
         )
         setUserFirstName(userResponse.data.first_name)
         setUserDetails(userResponse.data)
-        console.log(userResponse.data)
+        // console.log(userResponse.data)
         
     }
     catch (error) {
@@ -47,7 +48,7 @@ function App() {
   useEffect(() => {
     if (localStorage.getItem("access_token") !== null) {
       setIsLoggedIn(true)
-      console.log("Logged in")
+      // console.log("Logged in")
       fetchData()
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

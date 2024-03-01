@@ -1,17 +1,25 @@
 import axios from "axios";
-import { useState } from "react";
 import { useUsers } from "../context/UserContext";
+import { useState } from "react";
 
 export default function Login() {
-  const [password, setPassword] = useState("");
+  const { username } = useUsers();
 
-  const { username, setUsername } = useUsers();
+  const [formData, setFormData] = useState({
+    username: "",
+    password: ""
+  })
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    // console.log(e.target.value)
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const user = {
-      username: username,
-      password: password,
+      username: formData.username,
+      password: formData.password,
     };
 
     const { data } = await axios.post(
@@ -26,7 +34,7 @@ export default function Login() {
     );
 
     localStorage.clear();
-    localStorage.setItem("username", username);
+    localStorage.setItem("username", formData.username);
     localStorage.setItem("access_token", data.access);
     localStorage.setItem("refresh_token", data.refresh);
     axios.defaults.headers.common["Authorization"] = `Bearer ${data["access"]}`;
@@ -53,9 +61,10 @@ export default function Login() {
               type="text"
               placeholder="username"
               name="username"
-              value={username}
+              value={formData.username}
               required
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={handleChange}
+
             />
           </div>
           <div className="mb-4">
@@ -71,9 +80,10 @@ export default function Login() {
               type="password"
               placeholder="******************"
               name="password"
-              value={password}
+              value={formData.password}
               required
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handleChange}
+
             />
             <p className="text-red-500 text-xs italic">
               Please choose a password.

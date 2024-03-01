@@ -38,8 +38,8 @@ export default function SignUp() {
     e.preventDefault();
     const user = {
       username: formData.username,
-      first_name: formData.firstName,
-      last_name: formData.lastName,
+      first_name: formData.first_name,
+      last_name: formData.last_name,
       email: formData.email,
       password: formData.password,
       password2: formData.password2,
@@ -127,7 +127,7 @@ export default function SignUp() {
               type="text"
               placeholder="Jane"
               name="firstName"
-              value={formData.firstName}
+              value={formData.first_name}
               onChange={handleChange}
             />
             <p className="text-red-500 text-xs italic">
@@ -148,7 +148,7 @@ export default function SignUp() {
               type="text"
               placeholder="Doe"
               name="lastName"
-              value={formData.lastName}
+              value={formData.last_name}
               onChange={handleChange}
             />
           </div>

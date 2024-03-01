@@ -25,7 +25,6 @@ export default function WishList({ isLoggedIn }) {
       );
 
       setWishList(wishes.data);
-      console.log(wishes.data);
     } catch (error) {
       console.log(error);
     }

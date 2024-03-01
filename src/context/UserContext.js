@@ -18,13 +18,13 @@ export const UsersProvider = ({children}) => {
         const storedUsername = localStorage.getItem('username')
         if (storedUsername) {
             setUsername(storedUsername)
-            console.log("Username stored")
+            // console.log(storedUsername)
         }
     }, [])
 
     async function getUser() {
         try {
-            const userResponse = await axios.get(`http://localhost:8000/users/${username}`,
+            const userResponse = await axios.get(`http://localhost:8000/users/${userDetails.username}`,
             {
               headers: {
                 "Content-Type": "application/json",

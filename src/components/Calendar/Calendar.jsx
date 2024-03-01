@@ -52,7 +52,7 @@ export default function Calendar({ peopleList }) {
 
   useEffect(() => {
     renderDays()
-    console.log(peopleList)
+    // console.log(peopleList)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentYear, currentMonth]);
 

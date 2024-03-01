@@ -46,7 +46,7 @@ export default function Home({isLoggedIn}) {
             return false;
           });
 
-          console.log("Next Birthdays:", nextBirthdayList);
+          // console.log("Next Birthdays:", nextBirthdayList);
           setNextBirthdays(nextBirthdayList);
         } catch (error) {
           console.log(error);
@@ -54,7 +54,7 @@ export default function Home({isLoggedIn}) {
       }
 
       fetchData();
-      console.log("Logged In");
+      // console.log("Logged In");
     }
   }, [isLoggedIn, username, token]);
 

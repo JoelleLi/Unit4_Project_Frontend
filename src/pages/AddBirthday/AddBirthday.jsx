@@ -31,7 +31,7 @@ export default function AddBirthday({ userDetails }) {
   function handleChange(e) {
     const { name, value } = e.target
     setFormData(prevFormData => ({ ...prevFormData, [name]: value }))
-    console.log(formData)
+    // console.log(formData)
   }
 
   async function addPerson(formData, e) {
@@ -61,8 +61,7 @@ export default function AddBirthday({ userDetails }) {
         });
 
         if (response) {
-            console.log("Form submitted successfully", body);
-            console.log(response.data.id); // Log the response data containing the newly created person
+            // console.log("Form submitted successfully");
 
             // Extract the ID of the newly created person from the response data
             const newPersonId = response.data.id;

@@ -6,9 +6,11 @@ export default function Wish({ isLoggedIn, personId }) {
   // const token = localStorage.getItem("access_token");
   const [wish, setWish] = useState({});
   const [wishImages, setWishImages] = useState("");
-  const [reservedChecked, setReservedChecked] = useState();
+  const [reservedChecked, setReservedChecked] = useState(wish.reserved);
   const { id, username } = useParams();
   const navigate = useNavigate()
+  
+  
   async function fetchData() {
     try {
       const singleWish = await axios.get(
@@ -39,7 +41,7 @@ export default function Wish({ isLoggedIn, personId }) {
         );
         setWishImages(imagesData);
       } else {
-        console.log("No images");
+        // console.log("No images");
       }
     } catch (error) {
       console.log(error);
@@ -47,22 +49,21 @@ export default function Wish({ isLoggedIn, personId }) {
   }
 
   useEffect(() => {
-    fetchData();
-    setReservedChecked(wish.reserved || false);
+    fetchData()
+    // if (wish.reserved !== undefined) {
+    //   setReservedChecked(wish.reserved)
+    // }
+    // setReservedChecked(wish.reserved || false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  useEffect(() => {
-    updateReserved();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reservedChecked, !reservedChecked]);
-
-  async function updateReserved() {
+  async function updateReserved(check) {
+    setReservedChecked((prevState) => !prevState);
     try {
       const response = await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}/wishlist/wish/${id}/`,
         {
-          reserved: reservedChecked,
+          reserved: check,
           name: wish.name,
           priority: wish.priority,
           // Add other fields if needed
@@ -131,19 +132,20 @@ export default function Wish({ isLoggedIn, personId }) {
         )}
       </div>
 
-      <div className="flex flex-row content-center justify-center mt-1">
-        <div className="badge badge-accent">Reserved</div>
-        <label className="swap swap-flip ml-1">
-          <input
-            type="checkbox"
-            checked={reservedChecked}
-            onChange={() => setReservedChecked((prevState) => !prevState)}
-          />
-          <div className="swap-on">✅</div>
-          <div className="swap-off">❌</div>
-        </label>
-      </div>
-
+      {wish && wish.reserved !== undefined && (
+  <div className="flex flex-row content-center justify-center mt-1">
+    <div className="badge badge-accent">Reserved</div>
+    <label className="swap swap-flip ml-1">
+      <input
+        type="checkbox"
+        checked={reservedChecked}
+        onChange={(e) => updateReserved(e.target.checked)}
+      />
+      <div className="swap-off">✅</div>
+      <div className="swap-on">❌</div>
+    </label>
+  </div>
+)}
       <div className="flex flex-col gap-3 mt-5 mb-5">
         <div className="badge badge-outline">Description</div>
 

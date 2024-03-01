@@ -37,7 +37,7 @@ export default function EditWish() {
         reserved: singleWish.data.reserved,
         priority: singleWish.data.priority,
       });
-      console.log(singleWish.data);
+      // console.log(singleWish.data);
       setWishImages([]);
 
       if (singleWish.data.images && singleWish.data.images.length > 0) {
@@ -53,15 +53,15 @@ export default function EditWish() {
               }
             );
             const imagesData = imagesResponse.data;
-            console.log(imagesData);
+            // console.log(imagesData);
             setWishImages((prevImages) => [...prevImages, imagesData]);
-            console.log(wishImages);
+            // console.log(wishImages);
           } catch (error) {
             console.log(error);
           }
         }
       } else {
-        console.log("No images");
+        // console.log("No images");
       }
     } catch (error) {
       console.log(error);
@@ -138,7 +138,7 @@ export default function EditWish() {
       reserved: formData.reserved,
       priority: formData.priority,
     };
-    console.log(body);
+    // console.log(body);
 
     try {
       const response = await axios.put(
@@ -158,7 +158,7 @@ export default function EditWish() {
           ...body,
         }));
         setFormData(body);
-        console.log("Form submitted successfully", body);
+        console.log("Form submitted successfully");
       }
     } catch (error) {
       console.error(error);

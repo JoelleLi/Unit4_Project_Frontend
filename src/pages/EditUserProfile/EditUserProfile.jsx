@@ -29,7 +29,7 @@ export default function EditUserProfile({ isLoggedIn, userDetails }) {
   function handleChange(e) {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
-    console.log(formData);
+    // console.log(formData);
   }
 
   async function saveEdit(formData, e) {
@@ -45,7 +45,7 @@ export default function EditUserProfile({ isLoggedIn, userDetails }) {
       drinks_alcohol: formData.drinks_alcohol,
       user: userDetails.id,
     };
-    console.log(body);
+    // console.log(body);
 
     try {
       const response = await axios.put(
@@ -102,7 +102,6 @@ export default function EditUserProfile({ isLoggedIn, userDetails }) {
 
       // Optionally, perform additional actions after successful upload
       console.log("Photo uploaded successfully!");
-      console.log(profileImageId);
 
       if (profileImageId) {
         await axios.delete(
@@ -136,7 +135,7 @@ export default function EditUserProfile({ isLoggedIn, userDetails }) {
         }
       );
       const userProfileData = userProfileResponse.data;
-      console.log(userProfileResponse.data);
+      // console.log(userProfileResponse.data);
 
       setUserProfile(userProfileData);
       setProfileId(userProfileData.id);
