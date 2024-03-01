@@ -55,8 +55,9 @@ function App() {
 
   return (
     <>
+    <div className='appContainer'>
       <div className='App container'>
-        <div className='appContainer container w-80 mt-5'>
+        <div className='w-80 mt-5'>
         <NavBar isLoggedIn={ isLoggedIn } />
           <div className="container mx-auto">
           <Routes>
@@ -79,6 +80,7 @@ function App() {
           </div>
         </div>
       </div>
+    </div>
     </>
   )
 }

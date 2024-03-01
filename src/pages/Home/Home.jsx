@@ -67,12 +67,12 @@ export default function Home({isLoggedIn}) {
       {!isLoggedIn
       ?
       <>
-        <div className="hero bg-base-200">
+        <div className="hero bg-primary">
           <div className="hero-content text-center">
             <div className="max-w-md">
                 <h1 className="text-5xl font-bold">What do you want for your birthday?</h1>
                 <p className="py-6">Can't remember?<br/>Sign in to make wishlists for you and everyone you know.<br/>Never forget a birthday again!</p>
-                <button className="btn btn-primary" onClick={toggleComponent}>
+                <button className="btn btn-base-200" onClick={toggleComponent}>
                 { showLogin ? "Don't have an account? Sign Up" : "Already have an account? Log In" }
               </button>
               { showLogin ? <Login/> : <SignUp /> }
@@ -89,7 +89,7 @@ export default function Home({isLoggedIn}) {
       :
       <>
       <div className='p-2'>
-        <h5>Hello, {userFirstName}</h5>
+        <h5>Hello, <strong>{userFirstName}</strong></h5>
       </div>
         <NoticeBoard nextBirthdays={nextBirthdays} />
         <Calendar peopleList={ peopleList } />

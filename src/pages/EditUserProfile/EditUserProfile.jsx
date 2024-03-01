@@ -259,17 +259,38 @@ export default function EditUserProfile({ isLoggedIn, userDetails }) {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit}>
+
+            <div className="fileInputWrapper">
+              <form onSubmit={handleSubmit}>
+              <input onChange={handleFileChange} type="file" name="photo-file" className="file-input file-input-bordered file-input-xs w-full max-w-xs" />
+
+                {/* <input
+                  type="file"
+                  name="photo-file"
+                  onChange={handleFileChange}
+                /> */}
+                {selectedFile ? (
+                                <button type="submit" className="btn btn-xs mb-3">Update Photo</button>
+
+                ) : (
+                  <></>
+                )}
+              </form>
+            </div>
+
+            {/* <form onSubmit={handleSubmit}>
               <input
                 type="file"
                 name="photo-file"
                 onChange={handleFileChange}
                 className="fileInputWrapper"
               />
+
               <br />
               <br />
-              <button type="submit" className="btn btn-xs mb-3">Upload Photo</button>
-            </form>
+
+              <button type="submit" className="btn btn-xs mb-3">Update Photo</button>
+            </form> */}
           </>
         )}
       </div>

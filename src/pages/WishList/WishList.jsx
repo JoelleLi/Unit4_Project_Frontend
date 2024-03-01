@@ -37,32 +37,39 @@ export default function WishList({ isLoggedIn }) {
   }, [username]); // Call fetchData whenever params change
 
   return (
-    <div>
+<div>
+  {username !== "null"? (
+    <>
       <h3>{username}'s WishList</h3>
       {wishList.length > 0 ? (
         <div className="p-6 divide-y divide-slate-200">
-          {wishList &&
-            wishList.map((wish) => (
-              <Link to={`/wishlist/wish/${username}/${wish.id}`} key={wish.id}>
-                <WishCard wish={wish} key={wish.id} />
-              </Link>
-            ))}
+          {wishList.map((wish) => (
+            <Link to={`/wishlist/wish/${username}/${wish.id}`} key={wish.id}>
+              <WishCard wish={wish} key={wish.id} />
+            </Link>
+          ))}
         </div>
       ) : (
-        <p>No wishes yet</p>
+        <div className="m-5">
+          <p>No wishes yet</p>
+        </div>
       )}
-
-      {isLoggedIn ? (
-        <>
-          <Link to="/wishlist/add">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-              Add Wish
-            </button>
-          </Link>
-        </>
-      ) : (
-        <></>
-      )}
+    </>
+  ) : (
+    <div>
+      <p>You're not logged in</p>
+      <p>Log in to view your wishlist</p>
+      <Link to="/">
+      <button className="btn btn-neutral m-3">Log In</button>
+      </Link>
     </div>
+  )}
+
+  {isLoggedIn && (
+    <Link to="/wishlist/add">
+      <button className="btn btn-outline">Add Wish</button>
+    </Link>
+  )}
+</div>
   );
 }

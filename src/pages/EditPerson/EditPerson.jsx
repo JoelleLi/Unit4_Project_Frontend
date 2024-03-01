@@ -190,6 +190,25 @@ export default function EditPerson({ userDetails }) {
     }
   }
 
+  const handleDeleteImage = async (profileImageId) => {
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_BACKEND_URL}/photos/${profileImageId}/delete/`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // Update profileImageId state to null after successful deletion
+      // setProfileImageId(null);
+    } catch (error) {
+      console.log(error);
+    }
+    fetchData();
+  };
+
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -205,32 +224,97 @@ export default function EditPerson({ userDetails }) {
       </div>
 
       <div>
-        {profileImage ? (
+      {profileImage ? (
           <div>
             <div className="avatar">
               <div className="w-24 rounded-full m-3">
                 <img src={profileImage} alt="User Profile Avatar" />
               </div>
             </div>
-            <form onSubmit={handleSubmit}>
-              <input
-                onChange={handleFileChange}
-                type="file"
-                name="photo-file"
-                className="file-input file-input-bordered file-input-xs w-full max-w-xs"
-              />
-              <br />
-              <br />
-              <button type="submit" className="btn btn-xs">Update Photo</button>
-            </form>
+            <div className="fileInputWrapper">
+              <form onSubmit={handleSubmit}>
+              <input onChange={handleFileChange} type="file" name="photo-file" className="file-input file-input-bordered file-input-xs w-full max-w-xs" />
+
+                {/* <input
+                  type="file"
+                  name="photo-file"
+                  onChange={handleFileChange}
+                /> */}
+                {selectedFile ? (
+                  <button type="submit" className="btn btn-xs mt-2">
+                    Update Photo
+                  </button>
+                ) : (
+                  <></>
+                )}
+              </form>
+            </div>
+
+            <button
+              onClick={() => handleDeleteImage(profileImageId)}
+              className="badge badge-error gap-2 m-3"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                className="inline-block w-4 h-4 stroke-current"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+              Delete Image
+            </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit}>
-            <input type="file" name="photo-file" onChange={handleFileChange} />
-            <br />
-            <br />
-            <button type="submit">Upload Photo</button>
-          </form>
+          <>
+            <div className="avatar placeholder">
+              <div className="bg-neutral text-neutral-content rounded-full w-24">
+                <span className="text-3xl">
+                  {userDetails.first_name
+                    ? userDetails.first_name.charAt(0).toUpperCase()
+                    : ""}
+                </span>
+              </div>
+            </div>
+
+
+            <div className="fileInputWrapper">
+              <form onSubmit={handleSubmit}>
+              <input onChange={handleFileChange} type="file" name="photo-file" className="file-input file-input-bordered file-input-xs w-full max-w-xs" />
+
+                {/* <input
+                  type="file"
+                  name="photo-file"
+                  onChange={handleFileChange}
+                /> */}
+                {selectedFile ? (
+                                <button type="submit" className="btn btn-xs mb-3">Update Photo</button>
+
+                ) : (
+                  <></>
+                )}
+              </form>
+            </div>
+
+            {/* <form onSubmit={handleSubmit}>
+              <input
+                type="file"
+                name="photo-file"
+                onChange={handleFileChange}
+                className="fileInputWrapper"
+              />
+
+              <br />
+              <br />
+
+              <button type="submit" className="btn btn-xs mb-3">Update Photo</button>
+            </form> */}
+          </>
         )}
       </div>
 

@@ -109,10 +109,9 @@ export default function SignUp() {
 
   return (
     <>
-      <h5 className="p-2">Sign Up</h5>
-      <div className="flex flex-column items-center w-full max-w-xs">
+      <div className="flex flex-column items-center w-full max-w-xs mt-6">
         <form
-          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 rounded-box"
           onSubmit={handleSubmit}
         >
           <div className="mb-4">

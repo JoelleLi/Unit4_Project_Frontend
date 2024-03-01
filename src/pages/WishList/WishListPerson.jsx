@@ -48,13 +48,15 @@ export default function WishList() {
       }
     </div>
     :
-    <p>No wishes yet</p>
+    <div className="m-5">
+      <p>No wishes yet</p>
+    </div>    
     }
 
     
 
     <Link to="/wishlist/person/add">
-      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+      <button className="btn btn-outline">
           Add Wish
       </button>
     </Link>

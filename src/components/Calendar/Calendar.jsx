@@ -60,7 +60,7 @@ export default function Calendar({ peopleList }) {
     <div>
       <div className="wrapper">
         <header>
-          <p className="current-date">{`${months[currentMonth]} ${currentYear}`}</p>
+          <h4>{`${months[currentMonth]} ${currentYear}`}</h4>
           <div className="icons">
             <span className="material-symbols-rounded" onClick={prevMonth}>
             &#x3c;

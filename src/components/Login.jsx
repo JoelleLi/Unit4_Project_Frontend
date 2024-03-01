@@ -35,10 +35,9 @@ export default function Login() {
 
   return (
     <>
-      <h5 className="p-2">Login</h5>
-      <div className="w-full max-w-xs">
+      <div className="w-full max-w-xs mt-6">
         <form
-          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 rounded-box"
           onSubmit={handleSubmit}
         >
           <div className="mb-4">

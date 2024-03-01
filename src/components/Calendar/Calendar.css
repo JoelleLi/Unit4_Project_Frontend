@@ -63,10 +63,10 @@ header .current-date{
 .calendar li{
   color: #333;
   width: calc(100% / 7);
-  font-size: 1.07rem;
+  font-size: 0.7rem;
 }
 .calendar .weeks li{
-  font-weight: 500;
+  font-weight: 200;
   cursor: default;
 }
 .calendar .days li{

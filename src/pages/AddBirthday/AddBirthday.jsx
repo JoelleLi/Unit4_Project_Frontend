@@ -131,7 +131,8 @@ export default function AddBirthday({ userDetails }) {
                   </svg>
 
                  
-                  <input type="file" name="photo-file" onChange={handleFileChange} />
+                  <input onChange={handleFileChange} type="file" name="photo-file" 
+                  className="file-input file-input-bordered file-input-xs w-full max-w-xs"/>
                   <br /><br/>
                   {/* <button
                     type="submit"
@@ -380,19 +381,17 @@ export default function AddBirthday({ userDetails }) {
           </div>
         </div>
 
-        <div className="mt- flex items-center justify-end gap-x-6">
+        <div className="m-5 flex items-center justify-center gap-x-6">
           <Link to="/user">
             <button
               type="button"
-              className="text-sm font-semibold leading-6 text-gray-900"
-            >
+              className="btn btn-outline"            >
               Cancel
             </button>
           </Link>
           <button
             type="submit"
-            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
+            className="btn btn-outline"          >
             Add Birthday
           </button>
         </div>

@@ -71,7 +71,7 @@ export default function People({ isLoggedIn }) {
           </ul>
 
           <Link to="/addbirthday">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+            <button className="btn btn-outline">
               Add Birthday
             </button>
           </Link>
@@ -81,7 +81,7 @@ export default function People({ isLoggedIn }) {
           <p>You're not logged in</p>
           <p>Log in to view your birthdays</p>
           <Link to="/">
-          <button className="btn btn-primary m-3">Log In</button>
+          <button className="btn btn-neutral m-3">Log In</button>
           </Link>
         </div>
       )}

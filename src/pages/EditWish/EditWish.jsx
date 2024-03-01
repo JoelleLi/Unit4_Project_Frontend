@@ -8,7 +8,6 @@ export default function EditWish() {
   const [wish, setWish] = useState({});
   const [wishImages, setWishImages] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [setFormSubmitted] = useState(false);
   const { id, username } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -159,7 +158,6 @@ export default function EditWish() {
           ...body,
         }));
         setFormData(body);
-        setFormSubmitted(true);
         console.log("Form submitted successfully", body);
       }
     } catch (error) {
@@ -195,11 +193,11 @@ export default function EditWish() {
       <p>Add photos</p>
       <div className="fileInputWrapper">
         <form onSubmit={handleSubmit}>
-          <input type="file" name="photo-file" onChange={handleFileChange} />
+          <input name="photo-file" onChange={handleFileChange} type="file" className="file-input file-input-bordered file-input-xs w-full max-w-xs" />
           <br />
           <br />
           {selectedFile ? (
-            <button type="submit" className="btn btn-xs">
+            <button type="submit" className="btn btn-xs mb-3">
               Upload Photo
             </button>
           ) : (
@@ -242,7 +240,7 @@ export default function EditWish() {
 
       <form onSubmit={(e) => saveEdit(formData, e)}>
         <div className="">
-          <div className="border-b border-gray-900/10 pb-3">
+          <div className="border-b border-gray-900/10 pb-3 mt-3">
             <h2 className="text-base font-semibold leading-7 text-gray-900">
               Edit Wish
             </h2>
@@ -294,23 +292,21 @@ export default function EditWish() {
               </div>
 
               <div className="col-span-full">
-                <label
-                  htmlFor="description"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Description (optional)
+              <label className="form-control">
+                  <div className="label">
+                    <span className="label-text">Description</span>
+                    <span className="label-text-alt">(Optional)</span>
+                  </div>
+                  <textarea className="textarea textarea-bordered h-24" 
+                  placeholder="Description"
+                  type="text"
+                  name="description"
+                  value={formData.description}
+                  id="description"
+                  autoComplete="description"
+                  onChange={(e) => handleChange(e)}
+                  ></textarea>
                 </label>
-                <div className="mt-2">
-                  <input
-                    type="text"
-                    name="description"
-                    value={formData.description}
-                    id="description"
-                    autoComplete="description"
-                    onChange={handleChange}
-                    className="large-input block w-full px-2 rounded-md border-0 py-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
               </div>
 
               <div className="flex items-center mb-4">

@@ -1,34 +1,34 @@
-import { Link, useNavigate } from "react-router-dom"
-import { useState } from "react"
-import { useUsers } from "../../context/UserContext"
-import '../../App.css'
-import axios from "axios"
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useUsers } from "../../context/UserContext";
+import "../../App.css";
+import axios from "axios";
 
 export default function CreateWish({ userDetails }) {
-  const token = localStorage.getItem("access_token")
+  const token = localStorage.getItem("access_token");
   // const [setFormSubmitted] = useState(false)
-  const [selectedFiles, setSelectedFiles] = useState([])
-  const { username } = useUsers()
-  const [formData, setFormData] = useState({})
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const { username } = useUsers();
+  const [formData, setFormData] = useState({});
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleFileChange = (event) => {
-    setSelectedFiles([...selectedFiles, ...event.target.files])
-  }
+    setSelectedFiles([...selectedFiles, ...event.target.files]);
+  };
 
   function handleChange(e) {
-    const { name, value, type, checked } = e.target
-    const reservedValue = type === 'checkbox' ? checked : value
-    setFormData(prevFormData => ({ ...prevFormData, [name]: reservedValue }))
-    console.log(formData)
+    const { name, value, type, checked } = e.target;
+    const reservedValue = type === "checkbox" ? checked : value;
+    setFormData((prevFormData) => ({ ...prevFormData, [name]: reservedValue }));
+    console.log(formData);
   }
 
   async function addWish(formData, e) {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!formData.priority) {
-      alert('Please select a priority for the wish.');
+      alert("Please select a priority for the wish.");
       return;
     }
     const body = {
@@ -37,53 +37,58 @@ export default function CreateWish({ userDetails }) {
       description: formData.description,
       reserved: formData.reserved,
       priority: formData.priority,
-      user: userDetails.id
-    }
+      user: userDetails.id,
+    };
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/wishlist/add/${userDetails.id}/`, body,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` // Include access token in the request headers
-        }, 
-        withCredentials: true
-      })
-      if (response) {      
-        // setFormSubmitted(true) 
-        console.log("Form submitted successfully", body)
-        console.log(response.data.id)
-
-      const newWishId = response.data.id
-
-      const uploadPromises = selectedFiles.map(file => {
-        const photoFormData = new FormData();
-        photoFormData.append('photo-file', file);
-
-        return axios.post(`${process.env.REACT_APP_BACKEND_URL}/wish/${newWishId}/add_photo/`, photoFormData, {
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/wishlist/add/${userDetails.id}/`,
+        body,
+        {
           headers: {
-            'Content-Type': 'multipart/form-data',
-            "Authorization": `Bearer ${token}` // Include access token in the request headers
-          }
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Include access token in the request headers
+          },
+          withCredentials: true,
+        }
+      );
+      if (response) {
+        // setFormSubmitted(true)
+        console.log("Form submitted successfully", body);
+        console.log(response.data.id);
+
+        const newWishId = response.data.id;
+
+        const uploadPromises = selectedFiles.map((file) => {
+          const photoFormData = new FormData();
+          photoFormData.append("photo-file", file);
+
+          return axios.post(
+            `${process.env.REACT_APP_BACKEND_URL}/wish/${newWishId}/add_photo/`,
+            photoFormData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`, // Include access token in the request headers
+              },
+            }
+          );
         });
-      });
 
-      await Promise.all(uploadPromises);
+        await Promise.all(uploadPromises);
 
-      console.log('Photos uploaded successfully!');
+        console.log("Photos uploaded successfully!");
+      }
+    } catch (error) {
+      console.error("Error uploading photo:", error);
+      console.log(body);
     }
-
-      }catch (error) {
-        console.error('Error uploading photo:', error);
-        console.log(body)
-    }
-    navigate(`/wishlist/${username}`)
-
+    navigate(`/wishlist/${username}`);
   }
 
   return (
     <div>
-        <form onSubmit={(e) => addWish(formData, e)}>
+      <form onSubmit={(e) => addWish(formData, e)}>
         <div className="">
           <div className="border-b border-gray-900/10 pb-3">
             <h2 className="text-base font-semibold leading-7 text-gray-900">
@@ -99,7 +104,7 @@ export default function CreateWish({ userDetails }) {
                   htmlFor="photo"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                Photo
+                  Photo
                 </label>
                 <div className="mt-2 flex items-center gap-x-3">
                   <svg
@@ -115,17 +120,10 @@ export default function CreateWish({ userDetails }) {
                     />
                   </svg>
 
-                 
-                  <input type="file" name="photo-file" onChange={handleFileChange} multiple/>
-                  <br /><br/>
-                  {/* <button
-                    type="submit"
-                    className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                  >
-                    Upload Image
-                  </button> */}
-               
-
+                  <input onChange={handleFileChange} type="file" name="photo-file" className="file-input file-input-bordered file-input-xs w-full max-w-xs" 
+                  multiple/>
+                  <br />
+                  <br />
 
                 </div>
               </div>
@@ -134,13 +132,12 @@ export default function CreateWish({ userDetails }) {
 
           <div className="border-b border-gray-900/10 pb-3">
             <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-6">
-
               <div className="col-span-full">
                 <label
                   htmlFor="name"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                Wish Name
+                  Wish Name
                 </label>
                 <div className="mt-2">
                   <input
@@ -160,7 +157,7 @@ export default function CreateWish({ userDetails }) {
                   htmlFor="url"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                Link (optional)
+                  Link (optional)
                 </label>
                 <div className="mt-2">
                   <input
@@ -176,26 +173,30 @@ export default function CreateWish({ userDetails }) {
               </div>
 
               <div className="col-span-full">
-                <label
-                  htmlFor="description"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                Description (optional)
+
+
+                
+                <label className="form-control">
+                  <div className="label">
+                    <span className="label-text">Description</span>
+                    <span className="label-text-alt">(Optional)</span>
+                  </div>
+                  <textarea className="textarea textarea-bordered h-24" 
+                  placeholder="Description"
+                  type="text"
+                  name="description"
+                  value={formData.description}
+                  id="description"
+                  autoComplete="description"
+                  onChange={(e) => handleChange(e)}
+                  ></textarea>
                 </label>
-                <div className="mt-2">
-                  <input
-                    type="text"
-                    name="description"
-                    value={formData.description}
-                    id="description"
-                    autoComplete="description"
-                    onChange={(e) => handleChange(e)}
-                    className="large-input block w-full px-2 rounded-md border-0 py-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
-                </div>
+          
               </div>
 
-             <div className="flex items-center mb-4">
+
+
+              <div className="flex items-center mb-4">
                 <input
                   id="reserved"
                   type="checkbox"
@@ -217,7 +218,7 @@ export default function CreateWish({ userDetails }) {
                   htmlFor="priority"
                   className="block text-sm font-medium leading-6 text-gray-900"
                 >
-                Priority
+                  Priority
                 </label>
                 <div className="mt-2">
                   <select
@@ -256,5 +257,5 @@ export default function CreateWish({ userDetails }) {
         </div>
       </form>
     </div>
-  )
+  );
 }
