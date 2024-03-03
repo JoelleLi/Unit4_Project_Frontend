@@ -21,13 +21,12 @@ import EditWish from './pages/EditWish/EditWish'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const { setUserFirstName, setUserDetails, userDetails } = useUsers()
-  const storedUsername = localStorage.getItem('username')
+  const { setUserFirstName, setUserDetails, userDetails, username } = useUsers()
 
   // const token = localStorage.getItem("access_token")
   async function fetchData() {
     try {
-        const userResponse = await axios.get(`http://localhost:8000/users/${storedUsername}`,
+        const userResponse = await axios.get(`http://localhost:8000/users/${username}`,
         {
           headers: {
             "Content-Type": "application/json",
