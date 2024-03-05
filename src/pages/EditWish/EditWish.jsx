@@ -4,7 +4,7 @@ import axios from "axios";
 import "./EditWish.css";
 
 export default function EditWish() {
-  const token = localStorage.getItem("access_token");
+  // const token = localStorage.getItem("access_token");
   const [wish, setWish] = useState({});
   const [wishImages, setWishImages] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
