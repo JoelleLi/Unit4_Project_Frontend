@@ -4,7 +4,7 @@ import axios from "axios";
 import "./EditWish.css";
 
 export default function EditWish() {
-  // const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem("access_token");
   const [wish, setWish] = useState({});
   const [wishImages, setWishImages] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -80,7 +80,7 @@ export default function EditWish() {
         {
           headers: {
             "Content-Type": "application/json",
-            // Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -90,6 +90,7 @@ export default function EditWish() {
     } catch (error) {
       console.log(error);
     }
+    fetchData()
   };
 
   const handleFileChange = (event) => {
