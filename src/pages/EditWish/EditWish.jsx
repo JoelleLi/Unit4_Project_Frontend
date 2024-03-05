@@ -25,7 +25,7 @@ export default function EditWish() {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Include access token in the request headers
+            // Authorization: `Bearer ${token}`, 
           },
         }
       );
@@ -48,7 +48,7 @@ export default function EditWish() {
               {
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
+                  // Authorization: `Bearer ${token}`,
                 },
               }
             );
@@ -80,7 +80,7 @@ export default function EditWish() {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            // Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -111,7 +111,7 @@ export default function EditWish() {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`, // Include access token in the request headers
+            // Authorization: `Bearer ${token}`, 
           },
         }
       );
@@ -147,7 +147,7 @@ export default function EditWish() {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Include access token in the request headers
+            // Authorization: `Bearer ${token}`, 
           },
           withCredentials: true,
         }
@@ -170,12 +170,12 @@ export default function EditWish() {
     try {
       const response = await axios.delete(
         `${process.env.REACT_APP_BACKEND_URL}/wishlist/wish/${id}/`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Include access token in the request headers
-          },
-          withCredentials: true,
-        }
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${token}`, // Include access token in the request headers
+        //   },
+        //   withCredentials: true,
+        // }
       );
       if (response.status === 204) {
         console.log("wish deleted");

@@ -1,9 +1,8 @@
 import axios from "axios";
 // import { useUsers } from "../context/UserContext";
-import { useState } from "react";
+import { useState } from "react"
 
 export default function Login() {
-  // const { username } = useUsers();
 
   const [formData, setFormData] = useState({
     username: "",
@@ -31,7 +30,7 @@ export default function Login() {
       {
         withCredentials: true,
       }
-    );
+    )
 
     localStorage.clear();
     localStorage.setItem("username", formData.username);

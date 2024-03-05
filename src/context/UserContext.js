@@ -18,13 +18,13 @@ export const UsersProvider = ({children}) => {
         const storedUsername = localStorage.getItem('username')
         if (storedUsername) {
             setUsername(storedUsername)
-            // console.log(storedUsername)
+            getUser(username)
         }
-    }, [])
+    }, [username])
 
-    async function getUser() {
+    async function getUser(username) {
         try {
-            const userResponse = await axios.get(`http://localhost:8000/users/${userDetails.username}`,
+            const userResponse = await axios.get(`http://localhost:8000/users/${username}`,
             {
               headers: {
                 "Content-Type": "application/json",
@@ -33,6 +33,7 @@ export const UsersProvider = ({children}) => {
             }
             )
             setUserDetails(userResponse.data)
+            console.log(userResponse.data)
             
         }
         catch (error) {
