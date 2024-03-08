@@ -5,6 +5,7 @@ import { useEffect,useState } from 'react'
 import { useUsers } from './context/UserContext'
 import NavBar from "./components/NavBar/NavBar"
 import Home from "./pages/Home/Home"
+import About from './pages/About/About'
 import UserProfile from './pages/UserProfile/UserProfile'
 import People from './pages/People/People'
 import Person from './pages/Person/Person'
@@ -54,34 +55,29 @@ function App() {
   }, [isLoggedIn])
 
   return (
-    <>
-    <div className='appContainer'>
-      <div className='App container'>
-        <div className='w-80 mt-5'>
-        <NavBar isLoggedIn={ isLoggedIn } />
-          <div className="container mx-auto">
-          <Routes>
-            <Route path="/" element={ <Home isLoggedIn={ isLoggedIn } /> } />
-            <Route path="/user/:username" element={ <UserProfile isLoggedIn={ isLoggedIn } />} />
-            <Route path="/people" element={ <People isLoggedIn={ isLoggedIn } />} />
-            <Route path="/people/:id" element={ <Person isLoggedIn={ isLoggedIn } userDetails={userDetails} />} />
-            <Route path="/editperson/:id" element={ <EditPerson isLoggedIn={ isLoggedIn } userDetails={userDetails}/>} />
-            <Route path="/logout" element={<Logout isLoggedIn={ isLoggedIn } />} />
-            <Route path="/addbirthday" element={<AddBirthday isLoggedIn={ isLoggedIn } userDetails={ userDetails } />} />
-            <Route path="/editprofile" element={<EditUserProfile isLoggedIn={ isLoggedIn } userDetails={ userDetails } />} />
-            <Route path="/wishlist/:username" element={<WishList isLoggedIn={ isLoggedIn } />} />
-            <Route path="/wishlist/person/:id" element={<WishListPerson isLoggedIn={ isLoggedIn } />} />
-            <Route path="/wishlist/wish/:username/:id" element={<Wish isLoggedIn={ isLoggedIn } />} />
-            <Route path="/wishlist/wish/:id" element={<Wish isLoggedIn={ isLoggedIn } />} />
-            <Route path="/wishlist/add" element={<CreateWish isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
-            <Route path="/wishlist/person/add" element={<CreateWishPerson isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
-            <Route path="/wish/edit/:username/:id" element={<EditWish isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
-          </Routes>
-          </div>
-        </div>
+  <div className='App container mt-5'>
+    <NavBar isLoggedIn={ isLoggedIn } />
+      <div className="contentWrapper container w-80 md:w-auto mx-auto">
+      <Routes>
+        <Route path="/" element={ <Home isLoggedIn={ isLoggedIn } /> } />
+        <Route path="/about" element={ <About isLoggedIn={ isLoggedIn } /> } />
+        <Route path="/user/:username" element={ <UserProfile isLoggedIn={ isLoggedIn } />} />
+        <Route path="/people" element={ <People isLoggedIn={ isLoggedIn } />} />
+        <Route path="/people/:id" element={ <Person isLoggedIn={ isLoggedIn } userDetails={userDetails} />} />
+        <Route path="/editperson/:id" element={ <EditPerson isLoggedIn={ isLoggedIn } userDetails={userDetails}/>} />
+        <Route path="/logout" element={<Logout isLoggedIn={ isLoggedIn } />} />
+        <Route path="/addbirthday" element={<AddBirthday isLoggedIn={ isLoggedIn } userDetails={ userDetails } />} />
+        <Route path="/editprofile" element={<EditUserProfile isLoggedIn={ isLoggedIn } userDetails={ userDetails } />} />
+        <Route path="/wishlist/:username" element={<WishList isLoggedIn={ isLoggedIn } />} />
+        <Route path="/wishlist/person/:id" element={<WishListPerson isLoggedIn={ isLoggedIn } />} />
+        <Route path="/wishlist/wish/:username/:id" element={<Wish isLoggedIn={ isLoggedIn } />} />
+        <Route path="/wishlist/wish/:id" element={<Wish isLoggedIn={ isLoggedIn } />} />
+        <Route path="/wishlist/add" element={<CreateWish isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
+        <Route path="/wishlist/person/add" element={<CreateWishPerson isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
+        <Route path="/wish/edit/:username/:id" element={<EditWish isLoggedIn={ isLoggedIn } userDetails={ userDetails }/>} />
+      </Routes>
       </div>
-    </div>
-    </>
+  </div>
   )
 }
 

@@ -24,8 +24,7 @@ export default function EditWish() {
         `${process.env.REACT_APP_BACKEND_URL}/wishlist/wish/${id}`,
         {
           headers: {
-            "Content-Type": "application/json",
-            // Authorization: `Bearer ${token}`, 
+            "Content-Type": "application/json"
           },
         }
       );
@@ -37,7 +36,6 @@ export default function EditWish() {
         reserved: singleWish.data.reserved,
         priority: singleWish.data.priority,
       });
-      // console.log(singleWish.data);
       setWishImages([]);
 
       if (singleWish.data.images && singleWish.data.images.length > 0) {
@@ -53,15 +51,12 @@ export default function EditWish() {
               }
             );
             const imagesData = imagesResponse.data;
-            // console.log(imagesData);
             setWishImages((prevImages) => [...prevImages, imagesData]);
-            // console.log(wishImages);
           } catch (error) {
             console.log(error);
           }
         }
       } else {
-        // console.log("No images");
       }
     } catch (error) {
       console.log(error);

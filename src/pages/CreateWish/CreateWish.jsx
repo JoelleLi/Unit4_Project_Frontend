@@ -71,6 +71,7 @@ export default function CreateWish({ userDetails }) {
                 "Content-Type": "multipart/form-data",
                 Authorization: `Bearer ${token}`, // Include access token in the request headers
               },
+              withCredentials: true,
             }
           );
         });

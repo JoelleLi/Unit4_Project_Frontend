@@ -5,6 +5,8 @@ import SignUp from '../../components/SignUp'
 import Calendar from '../../components/Calendar/Calendar'
 import axios from 'axios'
 import NoticeBoard from '../../components/NoticeBoard/NoticeBoard'
+import { Link } from 'react-router-dom'
+import "./Home.css"
 
 
 export default function Home({isLoggedIn}) {
@@ -67,11 +69,14 @@ export default function Home({isLoggedIn}) {
       {!isLoggedIn
       ?
       <>
-        <div className="hero bg-primary">
+        <div className="hero bg-primary rounded-lg">
           <div className="hero-content text-center">
-            <div className="max-w-md">
-                <h1 className="text-5xl font-bold">What do you want for your birthday?</h1>
-                <p className="py-6">Can't remember?<br/>Sign in to make wishlists for you and everyone you know.<br/>Never forget a birthday again!</p>
+            <div className="flex flex-col items-center">
+                <h1 className="text-5xl font-bold mt-3 sm: pb-5 md:p-10">What do you want for your birthday?</h1>
+                <p className="">Can't remember?<br/>Sign in to make wishlists for you and everyone you know.<br/>Never forget a birthday again!</p>
+                <Link to="/about">
+                  <h5 className='howItWorks py-6'>How it works</h5>
+                </Link>
                 <button className="btn btn-base-200" onClick={toggleComponent}>
                 { showLogin ? "Don't have an account? Sign Up" : "Already have an account? Log In" }
               </button>
@@ -80,11 +85,6 @@ export default function Home({isLoggedIn}) {
             
           </div>
         </div>
-        {/* <button className='inline-block px-3 py-1 m-1 rounded-lg  shadow bg-indigo-300 text-white' onClick={toggleComponent}>
-          { showLogin ? "Don't have an account? Sign Up" : "Already have an account? Log In" }
-        </button>
-          { showLogin ? <Login/> : <SignUp /> } */}
-
       </>
       :
       <>

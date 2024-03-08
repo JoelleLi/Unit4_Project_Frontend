@@ -89,7 +89,7 @@ export default function Wish({ isLoggedIn, personId }) {
       <h5>{wish.name}</h5>
       <div id="wishesGrid">
         {wishImages ? (
-          <div className="carousel w-full mt-4 mb-4">
+          <div className="carousel xs:w-48 md:w-96 mt-4 mb-4">
             {wishImages.map((image, idx) => (
               <div
                 id={`slide${idx + 1}`}
@@ -146,14 +146,19 @@ export default function Wish({ isLoggedIn, personId }) {
     </label>
   </div>
 )}
-      <div className="flex flex-col gap-3 mt-5 mb-5">
+      <div className="flex flex-col gap-3 mt-5 mb-5 md:w-96 text-left">
         <div className="badge badge-outline">Description</div>
 
         <p className="text-left">{wish.description}</p>
 
         <div className="badge badge-outline text-left">Link</div>
-
-        <p>{wish.url}</p>
+        {wish.url ?
+        <Link to={wish.url}>
+          <p>Click Here</p>        
+        </Link>
+        :
+        <p>No link provided :(</p>
+        }
 
         {wish.priority === "High" ? (
           <div className="badge badge-error gap-2">Priority: High</div>

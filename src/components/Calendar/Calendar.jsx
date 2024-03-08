@@ -58,7 +58,7 @@ export default function Calendar({ peopleList }) {
 
   return (
     <div>
-      <div className="wrapper">
+      <div className="wrapper md:w-96">
         <header>
           <h4>{`${months[currentMonth]} ${currentYear}`}</h4>
           <div className="icons">

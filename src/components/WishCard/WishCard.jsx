@@ -51,7 +51,7 @@ export default function WishCard({ wish }) {
         </div>
         </div>
         )}
-        <div className="flex flex-col content-center justify-center flex-grow">
+        <div className="flex flex-col content-center justify-center flex-grow p-5">
             <p className="text-center"><strong>{wish.name}</strong></p>
             <p>Priority: {wish.priority}</p>
             <div>{wish.reserved ? <p>Reserved ✅</p> : <p>Reserved ❌</p>}</div>

@@ -15,6 +15,7 @@ export default function UserProfile({ isLoggedIn }) {
   // const token = localStorage.getItem("access_token");
 
   const { username } = useParams();
+  console.log(username)
 
   async function fetchData() {
     try {
